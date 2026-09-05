@@ -3221,6 +3221,467 @@
   }
 </style>
 
+
+<style>
+  /* ===== Отправка фотографий ===== */
+  .inbox-button{
+    position:relative;
+    width:72px;
+    min-height:72px;
+    display:grid;
+    place-items:center;
+    border:1px solid rgba(191,219,254,.92);
+    border-radius:18px;
+    background:rgba(255,255,255,.86);
+    color:#475569;
+    box-shadow:0 12px 28px rgba(37,99,235,.10);
+    cursor:pointer;
+    transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  }
+
+  .inbox-button:hover{
+    transform:translateY(-2px);
+    border-color:var(--profile-theme-2);
+    box-shadow:0 16px 34px var(--profile-theme-shadow);
+  }
+
+  .inbox-envelope{
+    width:29px;
+    height:29px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .inbox-badge{
+    position:absolute;
+    right:-6px;
+    top:-7px;
+    min-width:23px;
+    height:23px;
+    padding:0 6px;
+    display:grid;
+    place-items:center;
+    border:3px solid #fff;
+    border-radius:999px;
+    background:#ef4444;
+    color:#fff;
+    font-size:11px;
+    line-height:1;
+    font-weight:900;
+    box-shadow:0 6px 14px rgba(239,68,68,.22);
+  }
+
+  .inbox-badge[hidden]{display:none !important}
+
+  .share{
+    background:var(--profile-theme-soft) !important;
+    color:var(--profile-theme-text) !important;
+  }
+
+  .share:hover{
+    filter:brightness(.98);
+    transform:translateY(-1px);
+  }
+
+  .share-modal{
+    position:fixed;
+    inset:0;
+    z-index:11000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(15,23,42,.38);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .26s ease;
+  }
+
+  .share-modal.open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .share-dialog{
+    width:min(510px,100%);
+    max-height:min(720px,90vh);
+    overflow:auto;
+    padding:20px;
+    border:1px solid #d9e1ec;
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 26px 80px rgba(15,23,42,.20);
+    transform:translateY(14px) scale(.98);
+    transition:transform .34s cubic-bezier(.22,1,.36,1);
+  }
+
+  .share-modal.open .share-dialog{
+    transform:translateY(0) scale(1);
+  }
+
+  .share-dialog-head,
+  .inbox-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:15px;
+  }
+
+  .share-kicker,
+  .inbox-kicker{
+    margin-bottom:3px;
+    color:var(--profile-theme-text);
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+
+  .share-dialog h3,
+  .inbox-head h2{
+    margin:0;
+    color:#182236;
+    letter-spacing:-.03em;
+  }
+
+  .share-dialog h3{font-size:23px}
+  .inbox-head h2{font-size:25px}
+
+  .share-close,
+  .inbox-close{
+    width:38px;
+    height:38px;
+    flex:0 0 38px;
+    border:1px solid #d8e0ea;
+    border-radius:11px;
+    background:#fff;
+    color:#536174;
+    font-size:24px;
+    line-height:1;
+    cursor:pointer;
+  }
+
+  .share-preview{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    margin-top:17px;
+    padding:11px;
+    border:1px solid #e0e6ef;
+    border-radius:14px;
+    background:#fafbfd;
+  }
+
+  .share-preview img{
+    width:76px;
+    height:76px;
+    flex:0 0 76px;
+    object-fit:cover;
+    border-radius:11px;
+    background:#eef1f5;
+  }
+
+  .share-preview-copy{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+
+  .share-preview-copy strong{
+    color:#2a3548;
+    font-size:14px;
+  }
+
+  .share-preview-copy span{
+    color:#778296;
+    font-size:12px;
+    line-height:1.4;
+  }
+
+  .share-form{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:9px;
+    margin-top:14px;
+  }
+
+  .share-username-input{
+    min-width:0;
+    height:45px;
+    border:1px solid #ccd6e3;
+    border-radius:10px;
+    padding:0 12px;
+    background:#fff;
+    color:#263247;
+    font:inherit;
+    outline:none;
+  }
+
+  .share-username-input:focus{
+    border-color:var(--profile-theme-2);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--profile-theme) 10%,transparent);
+  }
+
+  .share-send-button{
+    min-width:112px;
+    border:1px solid var(--profile-theme);
+    border-radius:10px;
+    padding:0 16px;
+    background:var(--profile-theme);
+    color:#fff;
+    font:inherit;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  .share-message{
+    min-height:18px;
+    margin-top:9px;
+    color:#64748b;
+    font-size:12px;
+  }
+
+  .share-message.success{color:#15803d}
+  .share-message.error{color:#b42318}
+
+  .share-current{
+    margin-top:15px;
+    padding-top:14px;
+    border-top:1px solid #e7ebf1;
+  }
+
+  .share-current-title{
+    margin-bottom:8px;
+    color:#344054;
+    font-size:12px;
+    font-weight:900;
+  }
+
+  .share-current-list{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+  }
+
+  .share-person{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:9px 10px;
+    border:1px solid #e0e6ef;
+    border-radius:10px;
+    background:#fff;
+  }
+
+  .share-person-main{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+
+  .share-person-main strong{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:#334155;
+    font-size:13px;
+  }
+
+  .share-person-main span{
+    color:#8a94a5;
+    font-size:10px;
+  }
+
+  .share-revoke{
+    flex:0 0 auto;
+    border:1px solid #fecaca;
+    border-radius:8px;
+    padding:7px 9px;
+    background:#fff5f5;
+    color:#dc2626;
+    font:inherit;
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+  }
+
+  .share-empty{
+    padding:10px 0;
+    color:#98a2b3;
+    font-size:12px;
+  }
+
+  /* ===== Полученные ===== */
+  .inbox-backdrop{
+    position:fixed;
+    inset:0;
+    z-index:10700;
+    background:rgba(15,23,42,.28);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .32s ease;
+  }
+
+  .inbox-backdrop.open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .inbox-drawer{
+    position:fixed;
+    z-index:10800;
+    top:0;
+    right:-470px;
+    bottom:0;
+    width:min(450px,calc(100vw - 18px));
+    padding:20px;
+    overflow-y:auto;
+    border-left:1px solid #d8e0ea;
+    background:#fff;
+    box-shadow:-20px 0 55px rgba(15,23,42,.16);
+    transition:right .46s cubic-bezier(.22,1,.36,1);
+  }
+
+  .inbox-drawer.open{right:0}
+
+  .inbox-description{
+    margin:10px 0 16px;
+    color:#748094;
+    font-size:12px;
+    line-height:1.45;
+  }
+
+  .inbox-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .received-card{
+    overflow:hidden;
+    border:1px solid #dce3ec;
+    border-radius:15px;
+    background:#fff;
+  }
+
+  .received-photo-wrap{
+    position:relative;
+    height:215px;
+    overflow:hidden;
+    background:#eef1f5;
+    cursor:zoom-in;
+  }
+
+  .received-photo{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+  }
+
+  .received-sender{
+    position:absolute;
+    left:10px;
+    top:10px;
+    padding:6px 9px;
+    border-radius:9px;
+    background:rgba(15,23,42,.68);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    backdrop-filter:blur(6px);
+  }
+
+  .received-body{
+    padding:12px;
+  }
+
+  .received-meta{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    color:#7a8698;
+    font-size:10px;
+  }
+
+  .received-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    min-height:5px;
+    margin-top:8px;
+  }
+
+  .received-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:11px;
+  }
+
+  .received-actions button{
+    min-height:39px;
+    border-radius:9px;
+    font:inherit;
+    font-size:12px;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  .received-open{
+    border:1px solid #d4dce7;
+    background:#fff;
+    color:#46546a;
+  }
+
+  .received-save{
+    border:1px solid var(--profile-theme);
+    background:var(--profile-theme);
+    color:#fff;
+  }
+
+  .received-save.saved{
+    border-color:#bbdfc8;
+    background:#edf9f1;
+    color:#15803d;
+    cursor:default;
+  }
+
+  .inbox-empty{
+    padding:38px 10px;
+    text-align:center;
+    color:#8a95a7;
+    font-size:13px;
+    line-height:1.55;
+  }
+
+  @media(max-width:720px){
+    .inbox-button{
+      width:64px;
+      min-height:64px;
+      border-radius:16px;
+    }
+
+    .share-form{
+      grid-template-columns:1fr;
+    }
+
+    .share-send-button{
+      height:43px;
+    }
+
+    .received-photo-wrap{
+      height:190px;
+    }
+  }
+</style>
+
 </head>
 <body>
 
@@ -3366,6 +3827,15 @@
           <strong id="favoriteCount">0</strong>
           <span>избранных</span>
         </div>
+
+        <button class="inbox-button" id="inboxButton" type="button" aria-label="Открыть полученные фотографии" title="Полученные фотографии">
+          <svg class="inbox-envelope" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6.5h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"></path>
+            <path d="m3.2 8 7.4 5.7a2.25 2.25 0 0 0 2.8 0L20.8 8"></path>
+          </svg>
+          <span class="inbox-badge" id="inboxBadge" hidden>0</span>
+        </button>
+
         <div class="account-pill" id="accountPill" hidden>
           <span id="accountEmail"></span>
           <button id="logoutBtn" type="button">Выйти</button>
@@ -3439,6 +3909,52 @@
     <img id="lightboxImage" src="" alt="Фотография в полном размере">
   </div>
 
+  <div class="share-modal" id="shareModal" aria-hidden="true">
+    <div class="share-dialog" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+      <div class="share-dialog-head">
+        <div>
+          <div class="share-kicker">Photo Finder</div>
+          <h3 id="shareTitle">Отправить фотографию</h3>
+        </div>
+        <button class="share-close" id="shareClose" type="button" aria-label="Закрыть">×</button>
+      </div>
+
+      <div class="share-preview">
+        <img id="sharePreviewImage" src="" alt="Фотография для отправки">
+        <div class="share-preview-copy">
+          <strong>Кому отправить?</strong>
+          <span>Введи юзернейм пользователя Photo Finder.</span>
+        </div>
+      </div>
+
+      <div class="share-form">
+        <input class="share-username-input" id="shareUsernameInput" type="text" maxlength="24" autocomplete="off" placeholder="Например: Egornoobass67">
+        <button class="share-send-button" id="shareSendButton" type="button">Отправить</button>
+      </div>
+
+      <div class="share-message" id="shareMessage"></div>
+
+      <div class="share-current">
+        <div class="share-current-title">Уже отправлено</div>
+        <div class="share-current-list" id="shareCurrentList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="inbox-backdrop" id="inboxBackdrop"></div>
+  <aside class="inbox-drawer" id="inboxDrawer" aria-hidden="true">
+    <div class="inbox-head">
+      <div>
+        <div class="inbox-kicker">Photo Finder</div>
+        <h2>Полученные фотографии</h2>
+      </div>
+      <button class="inbox-close" id="inboxClose" type="button" aria-label="Закрыть">×</button>
+    </div>
+
+    <div class="inbox-description">Здесь фотографии, которыми с тобой поделились другие пользователи.</div>
+    <div class="inbox-list" id="inboxList"></div>
+  </aside>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -3460,6 +3976,21 @@
     const sortBy = document.getElementById('sortBy');
     const favOnly = document.getElementById('favOnly');
     const collectionStats = document.getElementById('collectionStats');
+
+    const inboxButton = document.getElementById('inboxButton');
+    const inboxBadge = document.getElementById('inboxBadge');
+    const inboxBackdrop = document.getElementById('inboxBackdrop');
+    const inboxDrawer = document.getElementById('inboxDrawer');
+    const inboxClose = document.getElementById('inboxClose');
+    const inboxList = document.getElementById('inboxList');
+
+    const shareModal = document.getElementById('shareModal');
+    const shareClose = document.getElementById('shareClose');
+    const sharePreviewImage = document.getElementById('sharePreviewImage');
+    const shareUsernameInput = document.getElementById('shareUsernameInput');
+    const shareSendButton = document.getElementById('shareSendButton');
+    const shareMessage = document.getElementById('shareMessage');
+    const shareCurrentList = document.getElementById('shareCurrentList');
 
     const authScreen = document.getElementById('authScreen');
     const authEmail = document.getElementById('authEmail');
@@ -3526,6 +4057,10 @@
     let items = [];
     let favoriteOnly = false;
     let busy = false;
+
+    let activeSharePhoto = null;
+    let receivedItems = [];
+    let inboxPollTimer = null;
 
     function setBusy(state){
       busy = state;
@@ -3919,6 +4454,358 @@
       return data.signedUrl;
     }
 
+
+    function setShareMessage(message = '', type = ''){
+      shareMessage.textContent = message;
+      shareMessage.className = 'share-message' + (type ? ` ${type}` : '');
+    }
+
+    function sharingErrorMessage(error){
+      const text = String(error?.message || error || '').toLowerCase();
+
+      if(text.includes('username_not_found')){
+        return 'Пользователь с таким юзернеймом не найден.';
+      }
+
+      if(text.includes('cannot_share_with_yourself')){
+        return 'Нельзя отправить фотографию самому себе.';
+      }
+
+      if(text.includes('already_shared')){
+        return 'Эта фотография уже отправлена этому пользователю.';
+      }
+
+      if(text.includes('photo_not_found')){
+        return 'Фотография больше недоступна.';
+      }
+
+      return 'Не удалось отправить фотографию.';
+    }
+
+    function getPathExtension(storagePath){
+      const clean = String(storagePath || '').split('?')[0];
+      const last = clean.split('/').pop() || '';
+      const ext = (last.includes('.') ? last.split('.').pop() : 'jpg')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g,'')
+        .slice(0,8);
+
+      return ext || 'jpg';
+    }
+
+    function updateInboxBadge(count){
+      const n = Math.max(0, Number(count) || 0);
+      inboxBadge.textContent = n > 99 ? '99+' : String(n);
+      inboxBadge.hidden = n === 0;
+      inboxButton.setAttribute(
+        'aria-label',
+        n
+          ? `Полученные фотографии: ${n}`
+          : 'Полученных фотографий пока нет'
+      );
+    }
+
+    async function refreshInboxCount(){
+      if(!sb || !currentUser) return;
+
+      try{
+        const { data, error } = await sb.rpc('get_received_share_count');
+        if(error) throw error;
+        updateInboxBadge(data || 0);
+      }catch(error){
+        console.warn('Не удалось обновить счётчик полученных фото:', error);
+      }
+    }
+
+    async function loadPhotoShareRecipients(photoId){
+      if(!sb || !currentUser || !photoId) return;
+
+      shareCurrentList.innerHTML = '<div class="share-empty">Загрузка…</div>';
+
+      try{
+        const { data, error } = await sb.rpc('get_photo_shares', {
+          p_photo_id:photoId
+        });
+
+        if(error) throw error;
+
+        const rows = data || [];
+
+        if(!rows.length){
+          shareCurrentList.innerHTML =
+            '<div class="share-empty">Эту фотографию пока никому не отправляли.</div>';
+          return;
+        }
+
+        shareCurrentList.innerHTML = rows.map(row => `
+          <div class="share-person">
+            <div class="share-person-main">
+              <strong>@${escapeHtml(row.recipient_username || 'Пользователь')}</strong>
+              <span>Отправлено ${escapeHtml(new Date(row.shared_at).toLocaleString('ru-RU'))}</span>
+            </div>
+            <button
+              class="share-revoke"
+              type="button"
+              data-share-id="${escapeHtml(row.share_id)}"
+            >Отменить доступ</button>
+          </div>
+        `).join('');
+      }catch(error){
+        console.error(error);
+        shareCurrentList.innerHTML =
+          '<div class="share-empty">Не удалось загрузить список получателей.</div>';
+      }
+    }
+
+    function openShareDialog(item){
+      activeSharePhoto = item;
+      sharePreviewImage.src = item.src || '';
+      shareUsernameInput.value = '';
+      setShareMessage('');
+      shareModal.classList.add('open');
+      shareModal.setAttribute('aria-hidden','false');
+      loadPhotoShareRecipients(item.id);
+
+      setTimeout(() => shareUsernameInput.focus(), 120);
+    }
+
+    function closeShareDialog(){
+      shareModal.classList.remove('open');
+      shareModal.setAttribute('aria-hidden','true');
+      activeSharePhoto = null;
+      sharePreviewImage.src = '';
+      shareUsernameInput.value = '';
+      setShareMessage('');
+    }
+
+    async function sendActivePhoto(){
+      if(!sb || !currentUser || !activeSharePhoto) return;
+
+      const username = normalizeUsername(shareUsernameInput.value);
+
+      if(!isValidUsername(username)){
+        setShareMessage('Введи корректный юзернейм.', 'error');
+        return;
+      }
+
+      shareSendButton.disabled = true;
+      shareSendButton.textContent = 'Отправляем…';
+      setShareMessage('');
+
+      try{
+        const { error } = await sb.rpc('share_photo_to_username', {
+          p_photo_id:activeSharePhoto.id,
+          p_username:username
+        });
+
+        if(error) throw error;
+
+        setShareMessage(`Фотография отправлена @${username}.`, 'success');
+        shareUsernameInput.value = '';
+        await loadPhotoShareRecipients(activeSharePhoto.id);
+      }catch(error){
+        console.error(error);
+        setShareMessage(sharingErrorMessage(error), 'error');
+      }finally{
+        shareSendButton.disabled = false;
+        shareSendButton.textContent = 'Отправить';
+      }
+    }
+
+    async function revokeShare(shareId){
+      if(!sb || !shareId) return;
+
+      try{
+        const { error } = await sb.rpc('revoke_photo_share', {
+          p_share_id:shareId
+        });
+
+        if(error) throw error;
+
+        if(activeSharePhoto){
+          await loadPhotoShareRecipients(activeSharePhoto.id);
+        }
+      }catch(error){
+        console.error(error);
+        setShareMessage('Не удалось отменить доступ.', 'error');
+      }
+    }
+
+    async function loadReceivedShares(){
+      if(!sb || !currentUser) return;
+
+      inboxList.innerHTML = '<div class="inbox-empty">Загрузка…</div>';
+
+      try{
+        const { data:rows, error } = await sb.rpc('get_received_shares');
+        if(error) throw error;
+
+        const loaded = await Promise.all((rows || []).map(async row => {
+          try{
+            const src = await loadBlobUrl(row.storage_path);
+
+            return {
+              shareId:row.share_id,
+              photoId:row.photo_id,
+              storagePath:row.storage_path,
+              tags:row.tags || '',
+              senderUsername:row.sender_username || 'Пользователь',
+              sharedAt:row.shared_at,
+              photoCreatedAt:row.photo_created_at,
+              alreadySaved:Boolean(row.already_saved),
+              src
+            };
+          }catch(error){
+            console.warn('Не удалось загрузить полученную фотографию:', error);
+            return null;
+          }
+        }));
+
+        receivedItems = loaded.filter(Boolean);
+        updateInboxBadge((rows || []).length);
+        renderReceivedShares();
+      }catch(error){
+        console.error(error);
+        inboxList.innerHTML =
+          '<div class="inbox-empty">Не удалось загрузить полученные фотографии.<br>Проверь, что SQL для отправки фотографий уже выполнен в Supabase.</div>';
+      }
+    }
+
+    function renderReceivedShares(){
+      if(!receivedItems.length){
+        inboxList.innerHTML =
+          '<div class="inbox-empty">Конвертик пока пуст.<br>Когда кто-то отправит тебе фотографию, она появится здесь.</div>';
+        return;
+      }
+
+      inboxList.innerHTML = receivedItems.map((item,index) => {
+        const tags = parseTags(item.tags);
+        const sharedDate = item.sharedAt
+          ? new Date(item.sharedAt).toLocaleString('ru-RU')
+          : '';
+
+        return `
+          <article class="received-card" data-share-id="${escapeHtml(item.shareId)}">
+            <div class="received-photo-wrap" data-open-received="${index}">
+              <img class="received-photo" src="${item.src}" alt="Полученная фотография">
+              <div class="received-sender">От @${escapeHtml(item.senderUsername)}</div>
+            </div>
+
+            <div class="received-body">
+              <div class="received-meta">
+                <span>Получено</span>
+                <span>${escapeHtml(sharedDate)}</span>
+              </div>
+
+              <div class="received-tags">
+                ${tags.map(tag => `<span class="tag-chip">${escapeHtml(tag)}</span>`).join('')}
+              </div>
+
+              <div class="received-actions">
+                <button class="received-open" type="button" data-open-received="${index}">Открыть</button>
+                <button
+                  class="received-save ${item.alreadySaved ? 'saved' : ''}"
+                  type="button"
+                  data-save-received="${index}"
+                  ${item.alreadySaved ? 'disabled' : ''}
+                >${item.alreadySaved ? '✓ Сохранено' : 'Сохранить себе'}</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function saveReceivedPhoto(index){
+      const item = receivedItems[index];
+      if(!item || item.alreadySaved || !currentUser || busy) return;
+
+      const button = inboxList.querySelector(`[data-save-received="${index}"]`);
+      if(button){
+        button.disabled = true;
+        button.textContent = 'Сохраняем…';
+      }
+
+      setBusy(true);
+
+      let newPath = '';
+
+      try{
+        const { data:blob, error:downloadError } = await sb.storage
+          .from(CLOUD_BUCKET)
+          .download(item.storagePath);
+
+        if(downloadError) throw downloadError;
+
+        const id = crypto.randomUUID();
+        const ext = getPathExtension(item.storagePath);
+        newPath = `${currentUser.id}/${id}.${ext}`;
+
+        const { error:uploadError } = await sb.storage
+          .from(CLOUD_BUCKET)
+          .upload(newPath, blob, {
+            cacheControl:'3600',
+            upsert:false,
+            contentType:blob.type || undefined
+          });
+
+        if(uploadError) throw uploadError;
+
+        const { error:insertError } = await sb
+          .from('photos')
+          .insert({
+            id,
+            user_id:currentUser.id,
+            storage_path:newPath,
+            tags:item.tags || '',
+            favorite:false,
+            source_photo_id:item.photoId
+          });
+
+        if(insertError){
+          if(newPath){
+            await sb.storage.from(CLOUD_BUCKET).remove([newPath]);
+          }
+
+          if(insertError.code === '23505'){
+            item.alreadySaved = true;
+            renderReceivedShares();
+            return;
+          }
+
+          throw insertError;
+        }
+
+        item.alreadySaved = true;
+        renderReceivedShares();
+        await loadPhotos();
+      }catch(error){
+        console.error(error);
+
+        if(button){
+          button.disabled = false;
+          button.textContent = 'Сохранить себе';
+        }
+
+        alert('Не удалось сохранить фотографию в свою коллекцию.');
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    function openInbox(){
+      inboxDrawer.classList.add('open');
+      inboxBackdrop.classList.add('open');
+      inboxDrawer.setAttribute('aria-hidden','false');
+      loadReceivedShares();
+    }
+
+    function closeInbox(){
+      inboxDrawer.classList.remove('open');
+      inboxBackdrop.classList.remove('open');
+      inboxDrawer.setAttribute('aria-hidden','true');
+    }
+
     async function loadPhotos(){
       if(!currentUser) return;
 
@@ -4062,6 +4949,7 @@
 
             <div class="actions">
               <button class="save" type="button">Сохранить</button>
+              <button class="share" type="button">Отправить</button>
               <button class="delete" type="button">Удалить</button>
             </div>
           </div>
@@ -4113,6 +5001,10 @@
             alert('Не удалось обновить избранное.');
           }
         });
+
+        card.querySelector('.share').onclick = () => {
+          openShareDialog(item);
+        };
 
         card.querySelector('.save').onclick = async () => {
           const tagsValue = parseTags(tagsInput.value).join(', ');
@@ -4353,6 +5245,46 @@
       render();
     });
 
+
+    inboxButton.addEventListener('click', openInbox);
+    inboxClose.addEventListener('click', closeInbox);
+    inboxBackdrop.addEventListener('click', closeInbox);
+
+    inboxList.addEventListener('click', e => {
+      const openButton = e.target.closest('[data-open-received]');
+      if(openButton){
+        const index = Number(openButton.dataset.openReceived);
+        const item = receivedItems[index];
+        if(item) openLightbox(item.src);
+        return;
+      }
+
+      const saveButton = e.target.closest('[data-save-received]');
+      if(saveButton){
+        saveReceivedPhoto(Number(saveButton.dataset.saveReceived));
+      }
+    });
+
+    shareClose.addEventListener('click', closeShareDialog);
+    shareModal.addEventListener('click', e => {
+      if(e.target === shareModal) closeShareDialog();
+    });
+
+    shareSendButton.addEventListener('click', sendActivePhoto);
+    shareUsernameInput.addEventListener('keydown', e => {
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        sendActivePhoto();
+      }
+    });
+
+    shareCurrentList.addEventListener('click', e => {
+      const button = e.target.closest('[data-share-id]');
+      if(button){
+        revokeShare(button.dataset.shareId);
+      }
+    });
+
     clearAll.addEventListener('click', async () => {
       if(!items.length || busy) return;
       if(!confirm('Удалить все фотографии, теги и избранное из облака?')) return;
@@ -4551,7 +5483,19 @@
     profileBackdrop.addEventListener('click', closeProfile);
 
     document.addEventListener('keydown', e => {
-      if(e.key === 'Escape' && profileDrawer.classList.contains('open')){
+      if(e.key !== 'Escape') return;
+
+      if(shareModal.classList.contains('open')){
+        closeShareDialog();
+        return;
+      }
+
+      if(inboxDrawer.classList.contains('open')){
+        closeInbox();
+        return;
+      }
+
+      if(profileDrawer.classList.contains('open')){
         closeProfile();
       }
     });
@@ -4621,6 +5565,17 @@
 
       if(!nextUser){
         currentUser = null;
+
+        if(inboxPollTimer){
+          clearInterval(inboxPollTimer);
+          inboxPollTimer = null;
+        }
+
+        closeInbox();
+        closeShareDialog();
+        updateInboxBadge(0);
+        receivedItems = [];
+
         revokeAllObjectUrls();
         items = [];
         render();
@@ -4640,6 +5595,15 @@
         setAuthMessage('');
         await migrateLocalPhotosOnce();
         await loadPhotos();
+        await refreshInboxCount();
+
+        if(inboxPollTimer){
+          clearInterval(inboxPollTimer);
+        }
+
+        inboxPollTimer = setInterval(() => {
+          refreshInboxCount();
+        }, 20000);
       }
     }
 
