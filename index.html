@@ -3123,30 +3123,142 @@
   }
 </style>
 
+
+<style>
+  .auth-mode-section[hidden],
+  .auth-actions[hidden]{
+    display:none !important;
+  }
+
+  .auth-mode-section{
+    animation:authModeAppear .24s ease both;
+  }
+
+  #signupFields .auth-label:not(:first-child){
+    margin-top:14px;
+  }
+
+  #backToLoginBtn{
+    color:#475569;
+  }
+
+  @keyframes authModeAppear{
+    from{
+      opacity:0;
+      transform:translateY(5px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0);
+    }
+  }
+</style>
+
+
+<style>
+  /* Плавное переключение между входом и регистрацией */
+  .auth-card{
+    will-change:height;
+  }
+
+  .auth-title,
+  .auth-copy,
+  .auth-mode-section,
+  .auth-actions{
+    will-change:transform, opacity;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .auth-card{
+      transition:none !important;
+    }
+  }
+</style>
+
+
+<style>
+  .auth-login-hint{
+    margin:14px 0 2px;
+    text-align:center;
+    color:#7b879a;
+    font-size:12px;
+    line-height:1.45;
+  }
+
+  .auth-login-hint[hidden]{
+    display:none !important;
+  }
+
+  .auth-login-hint button{
+    padding:0;
+    border:0;
+    background:transparent;
+    color:#2563eb;
+    font:inherit;
+    font-weight:800;
+    cursor:pointer;
+  }
+
+  .auth-login-hint button:hover{
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
+</style>
+
+
+<style>
+  /* Убираем лишнюю пустоту снизу формы авторизации */
+  .auth-message:empty{
+    display:none !important;
+  }
+
+  .auth-card{
+    padding-bottom:18px !important;
+  }
+
+  .auth-login-hint{
+    margin-bottom:0 !important;
+  }
+</style>
+
 </head>
 <body>
 
   <div class="auth-screen" id="authScreen">
     <div class="auth-card">
       <div class="auth-brand">Photo Finder</div>
-      <h2>Облачная фотоколлекция</h2>
-      <p class="auth-copy">Войди, чтобы фотографии не пропадали после очистки данных браузера и были доступны на других устройствах.</p>
+      <h2 id="authTitle">Вход в аккаунт</h2>
+      <p class="auth-copy" id="authCopy">Войди по юзернейму или email, чтобы открыть свою фотоколлекцию.</p>
 
-      <label class="auth-label" for="authEmail">Email или юзернейм</label>
-      <input class="auth-input" id="authEmail" type="text" autocomplete="username" placeholder="you@example.com или username">
+      <div class="auth-mode-section" id="loginFields">
+        <label class="auth-label" for="authEmail">Логин или почта</label>
+        <input class="auth-input" id="authEmail" type="text" autocomplete="username" placeholder="username или you@example.com">
+      </div>
 
-      <div class="signup-username-row">
-        <label class="auth-label" for="authUsername">Юзернейм для регистрации</label>
-        <input class="auth-input" id="authUsername" type="text" autocomplete="username" maxlength="24" placeholder="Например: denis35">
+      <div class="auth-mode-section" id="signupFields" hidden>
+        <label class="auth-label" for="authUsername">Логин</label>
+        <input class="auth-input" id="authUsername" type="text" autocomplete="username" maxlength="24" placeholder="Например: Egornoobass67">
         <div class="auth-field-hint">3–24 символа: латинские буквы, цифры, точка или _</div>
+
+        <label class="auth-label" for="authSignupEmail">Почта</label>
+        <input class="auth-input" id="authSignupEmail" type="email" autocomplete="email" placeholder="you@example.com">
       </div>
 
       <label class="auth-label" for="authPassword">Пароль</label>
       <input class="auth-input" id="authPassword" type="password" autocomplete="current-password" placeholder="Минимум 6 символов">
 
-      <div class="auth-actions">
+      <div class="auth-actions" id="loginActions">
         <button class="auth-primary" id="signInBtn" type="button">Войти</button>
-        <button class="auth-secondary" id="signUpBtn" type="button">Создать аккаунт</button>
+        <button class="auth-secondary" id="openSignupBtn" type="button">Создать аккаунт</button>
+      </div>
+
+      <div class="auth-login-hint" id="loginHint">
+        Впервые здесь? <button id="hintSignupBtn" type="button">Создай аккаунт</button> — это займёт пару секунд.
+      </div>
+
+      <div class="auth-actions" id="signupActions" hidden>
+        <button class="auth-primary" id="signUpBtn" type="button">Создать аккаунт</button>
+        <button class="auth-secondary" id="backToLoginBtn" type="button">Вернуться ко входу</button>
       </div>
 
       <div class="auth-message" id="authMessage"></div>
@@ -3178,7 +3290,7 @@
     <section class="profile-section">
       <div class="profile-section-title">Юзернейм</div>
       <label class="profile-label" for="profileUsername">Имя пользователя</label>
-      <input class="profile-input" id="profileUsername" type="text" maxlength="24" autocomplete="username" placeholder="Например: denis35">
+      <input class="profile-input" id="profileUsername" type="text" maxlength="24" autocomplete="username" placeholder="Например: Egornoobass67">
       <button class="profile-primary username-save-btn" id="saveUsernameBtn" type="button">Сохранить юзернейм</button>
       <div class="profile-hint">По нему можно входить вместо email. 3–24 символа: A–Z, 0–9, точка или _</div>
       <div class="profile-message" id="usernameMessage"></div>
@@ -3352,11 +3464,22 @@
     const authScreen = document.getElementById('authScreen');
     const authEmail = document.getElementById('authEmail');
     const authUsername = document.getElementById('authUsername');
+    const authSignupEmail = document.getElementById('authSignupEmail');
     const authPassword = document.getElementById('authPassword');
+    const authTitle = document.getElementById('authTitle');
+    const authCopy = document.getElementById('authCopy');
+    const loginFields = document.getElementById('loginFields');
+    const signupFields = document.getElementById('signupFields');
+    const loginActions = document.getElementById('loginActions');
+    const loginHint = document.getElementById('loginHint');
+    const hintSignupBtn = document.getElementById('hintSignupBtn');
+    const signupActions = document.getElementById('signupActions');
     const authMessage = document.getElementById('authMessage');
     const authSetup = document.getElementById('authSetup');
     const signInBtn = document.getElementById('signInBtn');
+    const openSignupBtn = document.getElementById('openSignupBtn');
     const signUpBtn = document.getElementById('signUpBtn');
+    const backToLoginBtn = document.getElementById('backToLoginBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const accountPill = document.getElementById('accountPill');
     const accountEmail = document.getElementById('accountEmail');
@@ -3412,6 +3535,150 @@
     function setAuthMessage(message = '', type = ''){
       authMessage.textContent = message;
       authMessage.className = 'auth-message' + (type ? ` ${type}` : '');
+    }
+
+
+    let authMode = 'login';
+    let authModeTransitioning = false;
+
+    async function setAuthMode(mode, instant = false){
+      const nextMode = mode === 'signup' ? 'signup' : 'login';
+
+      if(authModeTransitioning) return;
+      if(nextMode === authMode && !instant) return;
+
+      const card = authScreen.querySelector('.auth-card');
+      const goingToSignup = nextMode === 'signup';
+
+      const oldFields = authMode === 'signup' ? signupFields : loginFields;
+      const oldActions = authMode === 'signup' ? signupActions : loginActions;
+
+      if(!instant){
+        authModeTransitioning = true;
+
+        const outAnimation = [
+          authTitle,
+          authCopy,
+          oldFields,
+          oldActions
+        ].map((element, index) => {
+          return element.animate(
+            [
+              { opacity: 1, transform: 'translateY(0)' },
+              {
+                opacity: 0,
+                transform: goingToSignup
+                  ? 'translateY(-8px)'
+                  : 'translateY(8px)'
+              }
+            ],
+            {
+              duration: 170 + index * 12,
+              easing: 'cubic-bezier(.4,0,1,1)',
+              fill: 'forwards'
+            }
+          ).finished.catch(() => {});
+        });
+
+        await Promise.all(outAnimation);
+      }
+
+      const oldHeight = card.getBoundingClientRect().height;
+
+      authMode = nextMode;
+      const signup = authMode === 'signup';
+
+      loginFields.hidden = signup;
+      loginActions.hidden = signup;
+      loginHint.hidden = signup;
+      signupFields.hidden = !signup;
+      signupActions.hidden = !signup;
+
+      authTitle.textContent = signup ? 'Создание аккаунта' : 'Вход в аккаунт';
+      authCopy.textContent = signup
+        ? 'Придумай логин, укажи почту и пароль.'
+        : 'Войди по юзернейму или email, чтобы открыть свою фотоколлекцию.';
+
+      authPassword.autocomplete = signup ? 'new-password' : 'current-password';
+      authPassword.value = '';
+      setAuthMessage('');
+
+      const newFields = signup ? signupFields : loginFields;
+      const newActions = signup ? signupActions : loginActions;
+
+      [authTitle, authCopy, newFields, newActions].forEach(element => {
+        element.getAnimations().forEach(animation => animation.cancel());
+        element.style.opacity = '';
+        element.style.transform = '';
+      });
+
+      if(!instant){
+        /*
+          Сначала измеряем НАТУРАЛЬНУЮ высоту новой формы.
+          Раньше scrollHeight измерялся уже после фиксации старой высоты,
+          из-за чего при возврате ко входу карточка резко схлопывалась в конце.
+        */
+        card.style.transition = 'none';
+        card.style.height = 'auto';
+        card.style.overflow = 'hidden';
+
+        const newHeight = card.getBoundingClientRect().height;
+
+        card.style.height = `${oldHeight}px`;
+
+        // Принудительно фиксируем стартовую высоту перед плавным переходом.
+        void card.offsetHeight;
+
+        card.style.transition = 'height .46s cubic-bezier(.22,1,.36,1)';
+
+        requestAnimationFrame(() => {
+          card.style.height = `${newHeight}px`;
+        });
+
+        const inAnimations = [
+          authTitle,
+          authCopy,
+          newFields,
+          newActions
+        ].map((element, index) => {
+          return element.animate(
+            [
+              {
+                opacity: 0,
+                transform: signup
+                  ? 'translateY(9px)'
+                  : 'translateY(-9px)'
+              },
+              { opacity: 1, transform: 'translateY(0)' }
+            ],
+            {
+              duration: 280 + index * 22,
+              delay: index * 24,
+              easing: 'cubic-bezier(.22,1,.36,1)',
+              fill: 'both'
+            }
+          ).finished.catch(() => {});
+        });
+
+        await Promise.all([
+          ...inAnimations,
+          new Promise(resolve => setTimeout(resolve, 500))
+        ]);
+
+        card.style.height = '';
+        card.style.overflow = '';
+        card.style.transition = '';
+
+        authModeTransitioning = false;
+      }
+
+      requestAnimationFrame(() => {
+        if(signup){
+          authUsername.focus();
+        }else{
+          authEmail.focus();
+        }
+      });
     }
 
 
@@ -3573,6 +3840,7 @@
       authScreen.classList.remove('hidden');
       accountPill.hidden = true;
       closeProfile();
+      setAuthMode('login', true);
     }
 
     function hideAuth(){
@@ -4113,6 +4381,18 @@
       }
     });
 
+    openSignupBtn.addEventListener('click', () => {
+      setAuthMode('signup');
+    });
+
+    hintSignupBtn.addEventListener('click', () => {
+      setAuthMode('signup');
+    });
+
+    backToLoginBtn.addEventListener('click', () => {
+      setAuthMode('login');
+    });
+
     signInBtn.addEventListener('click', async () => {
       if(!configReady) return;
 
@@ -4170,12 +4450,12 @@
     signUpBtn.addEventListener('click', async () => {
       if(!configReady) return;
 
-      const email = authEmail.value.trim();
+      const email = authSignupEmail.value.trim();
       const username = normalizeUsername(authUsername.value);
       const password = authPassword.value;
 
       if(!email.includes('@')){
-        setAuthMessage('Для регистрации в первом поле укажи email.', 'error');
+        setAuthMessage('Введи правильную почту.', 'error');
         return;
       }
 
@@ -4208,6 +4488,8 @@
         if(data.session){
           setAuthMessage(`Аккаунт @${username} создан.`, 'success');
         }else{
+          setAuthMode('login');
+          authEmail.value = username;
           setAuthMessage(`Аккаунт @${username} создан. Проверь почту и подтверди регистрацию.`, 'success');
         }
       }catch(error){
@@ -4368,7 +4650,9 @@
       if(!configReady){
         authSetup.hidden = false;
         signInBtn.disabled = true;
+        openSignupBtn.disabled = true;
         signUpBtn.disabled = true;
+        backToLoginBtn.disabled = true;
         setAuthMessage('Сначала добавь данные Supabase в файл index.html.', 'error');
         showAuth();
         return;
@@ -4382,11 +4666,16 @@
       });
     }
 
-    [authEmail, authUsername, authPassword].forEach(input => {
+    [authEmail, authUsername, authSignupEmail, authPassword].forEach(input => {
       input.addEventListener('keydown', e => {
         if(e.key === 'Enter'){
           e.preventDefault();
-          signInBtn.click();
+
+          if(authMode === 'signup'){
+            signUpBtn.click();
+          }else{
+            signInBtn.click();
+          }
         }
       });
     });
