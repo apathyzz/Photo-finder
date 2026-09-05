@@ -6143,6 +6143,195 @@
   }
 </style>
 
+
+<style>
+  /* Заполняем левую часть hero полезными мини-карточками */
+  .showcase-copy{
+    justify-content:flex-start !important;
+    padding-top:26px !important;
+  }
+
+  .hero-features{
+    width:100%;
+    max-width:330px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:20px;
+  }
+
+  .hero-feature{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr);
+    align-items:center;
+    gap:10px;
+    min-height:58px;
+    padding:10px 11px;
+    border:1px solid rgba(207,220,238,.92);
+    border-radius:15px;
+    background:rgba(255,255,255,.72);
+    box-shadow:0 9px 22px rgba(65,93,132,.06);
+    backdrop-filter:blur(10px);
+    transition:
+      transform .26s cubic-bezier(.16,1,.3,1),
+      border-color .26s ease,
+      box-shadow .26s ease,
+      background-color .26s ease;
+  }
+
+  .hero-feature:hover{
+    transform:translateX(4px);
+    border-color:var(--profile-theme-border,#bfdbfe);
+    background:rgba(255,255,255,.92);
+    box-shadow:0 13px 27px rgba(65,93,132,.10);
+  }
+
+  .hero-feature-icon{
+    width:38px;
+    height:38px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:var(--profile-theme-soft,#eaf2ff);
+    color:var(--profile-theme,#2563eb);
+    font-size:17px;
+    font-weight:900;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);
+  }
+
+  .hero-feature div{
+    min-width:0;
+  }
+
+  .hero-feature strong{
+    display:block;
+    color:#283852;
+    font-size:10px;
+    font-weight:900;
+    line-height:1.2;
+  }
+
+  .hero-feature small{
+    display:block;
+    margin-top:3px;
+    color:#8a99ad;
+    font-size:8px;
+    font-weight:700;
+    line-height:1.4;
+  }
+
+  .showcase-copy .hand-note{
+    margin-top:18px !important;
+    margin-left:18px !important;
+    font-size:15px !important;
+  }
+
+  @media(max-width:1180px){
+    .hero-features{
+      max-width:100%;
+    }
+
+    .hero-feature{
+      min-height:54px;
+    }
+  }
+
+  @media(max-width:840px){
+    .showcase-copy{
+      align-items:center;
+      padding-top:20px !important;
+    }
+
+    .hero-features{
+      max-width:520px;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+    }
+
+    .hero-feature{
+      grid-template-columns:1fr;
+      text-align:center;
+      justify-items:center;
+      min-height:112px;
+    }
+
+    .showcase-copy .hand-note{
+      display:block !important;
+      margin-left:0 !important;
+      transform:none !important;
+    }
+  }
+
+  @media(max-width:560px){
+    .hero-features{
+      grid-template-columns:1fr;
+    }
+
+    .hero-feature{
+      grid-template-columns:auto 1fr;
+      justify-items:stretch;
+      min-height:56px;
+      text-align:left;
+    }
+  }
+</style>
+
+
+<style>
+  /* Случайные фото чуть компактнее */
+  .random-photo-aside{
+    align-items:center !important;
+    justify-content:center !important;
+  }
+
+  .random-photo-stack{
+    width:88% !important;
+    max-width:270px !important;
+    grid-template-rows:minmax(155px,1.35fr) minmax(86px,.72fr) auto !important;
+    gap:8px !important;
+    margin:auto;
+  }
+
+  .random-photo-main{
+    min-height:165px !important;
+  }
+
+  .random-photo-row{
+    min-height:90px !important;
+    gap:8px !important;
+  }
+
+  .random-photo-card{
+    border-radius:16px !important;
+  }
+
+  .random-photo-overlay{
+    left:11px !important;
+    bottom:10px !important;
+  }
+
+  .random-photo-overlay strong{
+    font-size:10px !important;
+  }
+
+  .random-photo-overlay small{
+    font-size:8px !important;
+  }
+
+  .random-photo-caption{
+    padding:9px 10px !important;
+    border-radius:13px !important;
+  }
+
+  .random-photo-caption > span{
+    width:31px !important;
+    height:31px !important;
+    border-radius:10px !important;
+    font-size:14px !important;
+  }
+</style>
+
 </head>
 <body>
 
@@ -6336,6 +6525,33 @@
         <span class="showcase-kicker">Личная фотоколлекция</span>
         <h1>Больше,<br>чем просто фото</h1>
         <p>Храни, находи и делись моментами, к которым хочется возвращаться.</p>
+
+        <div class="hero-features">
+          <div class="hero-feature">
+            <span class="hero-feature-icon">☁</span>
+            <div>
+              <strong>Всё в облаке</strong>
+              <small>Фото доступны с любого устройства</small>
+            </div>
+          </div>
+
+          <div class="hero-feature">
+            <span class="hero-feature-icon">⌕</span>
+            <div>
+              <strong>Находи за секунды</strong>
+              <small>Поиск по тегам и избранному</small>
+            </div>
+          </div>
+
+          <div class="hero-feature">
+            <span class="hero-feature-icon">↗</span>
+            <div>
+              <strong>Делись с друзьями</strong>
+              <small>Отправляй фотографии прямо в Photo Finder</small>
+            </div>
+          </div>
+        </div>
+
         <div class="hand-note">Воспоминания делают жизнь ярче ♡</div>
       </div>
 
@@ -6378,15 +6594,16 @@
         <div class="random-photo-stack">
           <a
             class="random-photo-card random-photo-main"
-            href="https://unsplash.com/photos/a-waterfall-with-a-mountain-in-the-background-LxCwqciEfu0"
+            href="#"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Открыть фотографию"
           >
             <img
-              src="https://images.unsplash.com/photo-1682547095516-5f6272c1304e?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=70&w=1200"
-              alt="Горы и водопад"
-              loading="lazy"
+              data-random-photo="main"
+              src="https://picsum.photos/seed/photo-finder-main/900/700"
+              alt="Случайная фотография"
+              loading="eager"
             >
             <span class="random-photo-overlay">
               <strong>Случайный момент</strong>
@@ -6397,29 +6614,31 @@
           <div class="random-photo-row">
             <a
               class="random-photo-card"
-              href="https://unsplash.com/photos/a-lake-with-trees-and-mountains-in-the-background-mVA0YQrIjN8"
+              href="#"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Открыть фотографию"
             >
               <img
-                src="https://images.unsplash.com/photo-1664902549556-695d79b0a2de?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=70&w=800"
-                alt="Озеро и горы"
-                loading="lazy"
+                data-random-photo="small-1"
+                src="https://picsum.photos/seed/photo-finder-small-1/600/500"
+                alt="Случайная фотография"
+                loading="eager"
               >
             </a>
 
             <a
               class="random-photo-card"
-              href="https://unsplash.com/photos/a-blue-lake-surrounded-by-mountains-and-trees-rel8imrx88E"
+              href="#"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Открыть фотографию"
             >
               <img
-                src="https://images.unsplash.com/photo-1724056638734-d00bb32dad20?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=70&w=800"
-                alt="Голубое горное озеро"
-                loading="lazy"
+                data-random-photo="small-2"
+                src="https://picsum.photos/seed/photo-finder-small-2/600/500"
+                alt="Случайная фотография"
+                loading="eager"
               >
             </a>
           </div>
@@ -9189,6 +9408,39 @@
 
     receivedShortcut?.addEventListener('click',() => {
       inboxButton?.click();
+    });
+  })();
+</script>
+
+
+<script>
+  (() => {
+    const randomImages = [...document.querySelectorAll('[data-random-photo]')];
+    if(!randomImages.length) return;
+
+    const makeSeed = (index) => {
+      const randomPart =
+        (window.crypto && crypto.getRandomValues)
+          ? crypto.getRandomValues(new Uint32Array(1))[0].toString(36)
+          : Math.random().toString(36).slice(2);
+
+      return `photo-finder-${Date.now()}-${index}-${randomPart}`;
+    };
+
+    randomImages.forEach((img,index) => {
+      const isMain = img.dataset.randomPhoto === 'main';
+      const width = isMain ? 900 : 600;
+      const height = isMain ? 700 : 500;
+      const seed = makeSeed(index);
+
+      const url = `https://picsum.photos/seed/${encodeURIComponent(seed)}/${width}/${height}`;
+
+      img.src = url;
+
+      const link = img.closest('.random-photo-card');
+      if(link){
+        link.href = url;
+      }
     });
   })();
 </script>
