@@ -3227,7 +3227,7 @@
   .inbox-button{
     position:relative;
     width:72px;
-    min-height:72px;
+    min-height:92px;
     display:grid;
     place-items:center;
     border:1px solid rgba(191,219,254,.92);
@@ -3495,7 +3495,7 @@
 
   .share-person-main span{
     color:#8a94a5;
-    font-size:10px;
+    font-size:14px;
   }
 
   .share-revoke{
@@ -3856,6 +3856,2293 @@
   }
 </style>
 
+
+<style>
+  body[data-theme="black"]{
+    --profile-theme:#111827;
+    --profile-theme-2:#374151;
+    --profile-theme-soft:#eef0f3;
+    --profile-theme-border:#c8cdd6;
+    --profile-theme-text:#111827;
+    --profile-theme-shadow:rgba(17,24,39,.18);
+  }
+
+  body[data-theme="cyan"]{
+    --profile-theme:#0891b2;
+    --profile-theme-2:#22d3ee;
+    --profile-theme-soft:#e7fbff;
+    --profile-theme-border:#a5f3fc;
+    --profile-theme-text:#0e7490;
+    --profile-theme-shadow:rgba(8,145,178,.16);
+  }
+
+  body[data-theme="indigo"]{
+    --profile-theme:#4f46e5;
+    --profile-theme-2:#818cf8;
+    --profile-theme-soft:#eef0ff;
+    --profile-theme-border:#c7d2fe;
+    --profile-theme-text:#4338ca;
+    --profile-theme-shadow:rgba(79,70,229,.16);
+  }
+
+  body[data-theme="yellow"]{
+    --profile-theme:#ca8a04;
+    --profile-theme-2:#facc15;
+    --profile-theme-soft:#fff9dc;
+    --profile-theme-border:#fde68a;
+    --profile-theme-text:#a16207;
+    --profile-theme-shadow:rgba(202,138,4,.16);
+  }
+
+  body[data-theme="gray"]{
+    --profile-theme:#64748b;
+    --profile-theme-2:#94a3b8;
+    --profile-theme-soft:#f1f5f9;
+    --profile-theme-border:#cbd5e1;
+    --profile-theme-text:#475569;
+    --profile-theme-shadow:rgba(71,85,105,.15);
+  }
+
+  .theme-black{background:#111827}
+  .theme-cyan{background:#06b6d4}
+  .theme-indigo{background:#4f46e5}
+  .theme-yellow{background:#eab308}
+  .theme-gray{background:#64748b}
+
+  /* Чёрная тема чуть более контрастная */
+  body[data-theme="black"] .profile-primary,
+  body[data-theme="black"] .save,
+  body[data-theme="black"] .fav-filter.active{
+    background:#111827 !important;
+    color:#fff !important;
+  }
+</style>
+
+
+<style>
+  /* Полученные фотографии: принять / отказаться */
+  .received-actions{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  .received-actions button{
+    min-width:0 !important;
+    padding:9px 6px !important;
+    white-space:nowrap;
+  }
+
+  .received-decline{
+    border:1px solid #fecaca;
+    background:#fff1f2;
+    color:#dc2626;
+  }
+
+  .received-decline:hover{
+    background:#ffe4e6;
+  }
+
+  .received-card.removing{
+    pointer-events:none;
+    animation:receivedDeclineOut .28s ease forwards;
+  }
+
+  @keyframes receivedDeclineOut{
+    from{
+      opacity:1;
+      transform:translateX(0) scale(1);
+    }
+    to{
+      opacity:0;
+      transform:translateX(18px) scale(.985);
+    }
+  }
+
+  /* Подпись на фото, которое пользователь принял и сохранил себе */
+  .received-from-badge{
+    position:absolute;
+    left:10px;
+    bottom:10px;
+    z-index:4;
+    max-width:calc(100% - 20px);
+    padding:6px 9px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:9px;
+    background:rgba(15,23,42,.70);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    box-shadow:0 5px 15px rgba(15,23,42,.14);
+  }
+
+  @media(max-width:420px){
+    .received-actions{
+      gap:6px !important;
+    }
+
+    .received-actions button{
+      padding:9px 3px !important;
+      font-size:11px !important;
+    }
+  }
+</style>
+
+
+<style>
+  /* Строка над тегами: ТЕГИ слева, владелец фотографии справа */
+  .tags-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:7px;
+  }
+
+  .tags-head .tags-label{
+    margin:0 !important;
+    flex:0 0 auto;
+  }
+
+  .photo-owner{
+    min-width:0;
+    max-width:62%;
+    overflow:hidden;
+    color:#7b879a;
+    font-size:11px;
+    font-weight:800;
+    line-height:1.2;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    text-align:right;
+  }
+
+  .photo-owner:hover{
+    color:var(--profile-theme-text, #1d4ed8);
+  }
+
+  @media(max-width:420px){
+    .photo-owner{
+      max-width:58%;
+      font-size:10px;
+    }
+  }
+</style>
+
+
+<style>
+  /* Стабильное отображение фото без мигания при обновлении интерфейса */
+  .grid .card{
+    animation:none !important;
+  }
+
+  .photo{
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+</style>
+
+
+<style>
+  .delete-all-modal{
+    position:fixed;
+    inset:0;
+    z-index:12000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(15,23,42,.38);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .24s ease, visibility 0s linear .24s;
+  }
+
+  .delete-all-modal.open{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transition:opacity .24s ease, visibility 0s linear 0s;
+  }
+
+  .delete-all-dialog{
+    width:min(410px,100%);
+    padding:24px;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    background:#fff;
+    box-shadow:0 24px 70px rgba(15,23,42,.22);
+    text-align:center;
+    opacity:0;
+    transform:translateY(10px) scale(.975);
+    transition:transform .3s cubic-bezier(.16,1,.3,1), opacity .22s ease;
+  }
+
+  .delete-all-modal.open .delete-all-dialog{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+
+  .delete-all-icon{
+    width:46px;
+    height:46px;
+    display:grid;
+    place-items:center;
+    margin:0 auto 14px;
+    border-radius:14px;
+    background:#fff1f2;
+    color:#dc2626;
+    font-size:24px;
+    font-weight:900;
+  }
+
+  .delete-all-dialog h3{
+    margin:0;
+    color:#182238;
+    font-size:20px;
+    letter-spacing:-.02em;
+  }
+
+  .delete-all-dialog p{
+    margin:10px auto 0;
+    max-width:330px;
+    color:#7a8598;
+    font-size:13px;
+    line-height:1.55;
+  }
+
+  .delete-all-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+    margin-top:20px;
+  }
+
+  .delete-all-actions button{
+    min-height:44px;
+    border-radius:11px;
+    font:inherit;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  .delete-all-cancel{
+    border:1px solid #d8e0ea;
+    background:#fff;
+    color:#4c586d;
+  }
+
+  .delete-all-confirm{
+    border:1px solid #ef4444;
+    background:#ef4444;
+    color:#fff;
+  }
+
+  .delete-all-confirm:hover{
+    background:#dc2626;
+    border-color:#dc2626;
+  }
+
+  .delete-all-confirm:disabled,
+  .delete-all-cancel:disabled{
+    opacity:.62;
+    cursor:wait;
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    .delete-all-modal,
+    .delete-all-dialog{
+      transition:none !important;
+    }
+  }
+</style>
+
+
+<style>
+  .decline-modal{
+    position:fixed;
+    inset:0;
+    z-index:12100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(15,23,42,.38);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .22s ease, visibility 0s linear .22s;
+  }
+
+  .decline-modal.open{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transition:opacity .22s ease, visibility 0s linear 0s;
+  }
+
+  .decline-dialog{
+    width:min(390px,100%);
+    padding:23px;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    background:#fff;
+    box-shadow:0 24px 70px rgba(15,23,42,.22);
+    text-align:center;
+    opacity:0;
+    transform:translateY(10px) scale(.975);
+    transition:transform .28s cubic-bezier(.16,1,.3,1), opacity .2s ease;
+  }
+
+  .decline-modal.open .decline-dialog{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+
+  .decline-icon{
+    width:44px;
+    height:44px;
+    display:grid;
+    place-items:center;
+    margin:0 auto 13px;
+    border-radius:14px;
+    background:#fff1f2;
+    color:#dc2626;
+    font-size:20px;
+    font-weight:900;
+  }
+
+  .decline-dialog h3{
+    margin:0;
+    color:#182238;
+    font-size:19px;
+  }
+
+  .decline-dialog p{
+    margin:9px auto 0;
+    color:#7b879a;
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  .decline-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+    margin-top:19px;
+  }
+
+  .decline-actions button{
+    min-height:43px;
+    border-radius:11px;
+    font:inherit;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  .decline-cancel{
+    border:1px solid #d8e0ea;
+    background:#fff;
+    color:#4b586c;
+  }
+
+  .decline-confirm{
+    border:1px solid #ef4444;
+    background:#ef4444;
+    color:#fff;
+  }
+
+  .decline-confirm:hover{
+    background:#dc2626;
+    border-color:#dc2626;
+  }
+
+  .decline-confirm:disabled,
+  .decline-cancel:disabled{
+    opacity:.62;
+    cursor:wait;
+  }
+
+  .received-card.removing{
+    pointer-events:none;
+    animation:receivedDeclineOut .28s ease forwards !important;
+  }
+
+  @keyframes receivedDeclineOut{
+    from{
+      opacity:1;
+      transform:translateX(0) scale(1);
+    }
+    to{
+      opacity:0;
+      transform:translateX(16px) scale(.985);
+    }
+  }
+</style>
+
+
+<style>
+  /* =========================================================
+     PHOTO FINDER — RADICAL HOME REDESIGN
+     ========================================================= */
+  body{
+    background:
+      radial-gradient(circle at 8% 4%, rgba(59,130,246,.16), transparent 25%),
+      radial-gradient(circle at 88% 12%, rgba(56,189,248,.13), transparent 28%),
+      linear-gradient(180deg,#f8fbff 0%,#edf5ff 42%,#f8fbff 100%) !important;
+    color:#14213a;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(255,255,255,.92), transparent 46%),
+      linear-gradient(120deg,rgba(255,255,255,.4),transparent 45%,rgba(255,255,255,.28));
+  }
+
+  .redesigned-home{
+    max-width:1500px !important;
+    margin:0 auto;
+    padding:18px 26px 58px !important;
+  }
+
+  /* ---------- Top navigation ---------- */
+  .app-topbar{
+    position:sticky;
+    top:10px;
+    z-index:100;
+    min-height:72px;
+    display:grid !important;
+    grid-template-columns:minmax(220px,1fr) auto minmax(220px,1fr);
+    align-items:center !important;
+    gap:22px !important;
+    margin:0 0 18px !important;
+    padding:14px 18px;
+    border:1px solid rgba(207,220,238,.78);
+    border-radius:20px;
+    background:rgba(255,255,255,.86);
+    box-shadow:0 14px 36px rgba(66,95,135,.10);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+
+  .profile-logo-button{
+    justify-self:start;
+    display:flex !important;
+    align-items:center;
+    gap:15px;
+    max-width:none !important;
+    padding:12px 14px !important;
+    border:0 !important;
+    border-radius:14px !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+
+  .profile-logo-button:hover{
+    transform:translateY(-1px);
+    background:#f5f9ff !important;
+  }
+
+  .logo-copy{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:1px;
+  }
+
+  .profile-logo-button .logo-text{
+    color:#112348 !important;
+    font-size:32px !important;
+    font-weight:900 !important;
+    letter-spacing:-.035em;
+  }
+
+  .logo-copy small{
+    color:#92a0b7;
+    font-size:10px;
+    font-weight:700;
+    text-transform:none;
+    letter-spacing:0;
+  }
+
+  .main-nav{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    padding:4px;
+    border:1px solid #e4ebf5;
+    border-radius:14px;
+    background:#f7faff;
+  }
+
+  .main-nav-item{
+    height:38px;
+    padding:0 16px;
+    border:0;
+    border-radius:10px;
+    background:transparent;
+    color:#61708a;
+    font:inherit;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+  }
+
+  .main-nav-item:hover{
+    color:var(--profile-theme-text,#1d4ed8);
+    background:#fff;
+  }
+
+  .main-nav-item.active{
+    background:#fff;
+    color:var(--profile-theme,#2563eb);
+    box-shadow:0 5px 14px rgba(55,91,145,.10);
+  }
+
+  .topbar-actions{
+    justify-self:end;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .topbar-inbox{
+    position:relative !important;
+    width:44px !important;
+    height:44px !important;
+    min-width:44px;
+    padding:0 !important;
+    border:1px solid #dde6f2 !important;
+    border-radius:13px !important;
+    background:#fff !important;
+    box-shadow:none !important;
+  }
+
+  .topbar-inbox:hover{
+    transform:translateY(-2px);
+    border-color:var(--profile-theme-border,#bfdbfe) !important;
+    box-shadow:0 9px 18px rgba(49,86,139,.10) !important;
+  }
+
+  .cloud-status{
+    min-height:44px;
+    display:grid;
+    grid-template-columns:auto auto;
+    grid-template-rows:auto auto;
+    align-items:center;
+    column-gap:7px;
+    padding:6px 10px;
+    border:1px solid #e2eaf4;
+    border-radius:13px;
+    background:#fff;
+  }
+
+  .cloud-dot{
+    grid-row:1/3;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 4px rgba(34,197,94,.10);
+  }
+
+  .cloud-status span:not(.cloud-dot){
+    color:#3f4d63;
+    font-size:11px;
+    font-weight:900;
+    line-height:1;
+  }
+
+  .cloud-status small{
+    color:#9aa6b7;
+    font-size:9px;
+    font-weight:700;
+    line-height:1;
+  }
+
+  /* ---------- Hero ---------- */
+  .showcase{
+    position:relative;
+    display:grid;
+    grid-template-columns:minmax(250px,.8fr) minmax(520px,1.55fr) minmax(230px,.65fr);
+    align-items:stretch;
+    gap:18px;
+    min-height:390px;
+    margin-bottom:18px;
+    padding:20px;
+    overflow:hidden;
+    border:1px solid rgba(203,218,238,.82);
+    border-radius:30px;
+    background:
+      radial-gradient(circle at 25% 20%,rgba(255,255,255,.95),rgba(255,255,255,.65) 32%,transparent 57%),
+      linear-gradient(135deg,#edf6ff 0%,#f7fbff 48%,#e8f4ff 100%);
+    box-shadow:0 22px 60px rgba(78,108,149,.12);
+  }
+
+  .showcase::before,
+  .showcase::after{
+    content:"";
+    position:absolute;
+    pointer-events:none;
+    border-radius:50%;
+    filter:blur(1px);
+  }
+
+  .showcase::before{
+    width:340px;
+    height:340px;
+    left:-110px;
+    bottom:-170px;
+    background:radial-gradient(circle at 35% 35%,rgba(56,189,248,.28),rgba(59,130,246,.04) 62%,transparent 70%);
+  }
+
+  .showcase::after{
+    width:300px;
+    height:300px;
+    right:-90px;
+    top:-100px;
+    background:radial-gradient(circle at 40% 40%,rgba(139,92,246,.18),rgba(59,130,246,.02) 65%,transparent 72%);
+  }
+
+  .showcase-copy{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:22px 18px 22px 12px;
+  }
+
+  .showcase-kicker{
+    width:max-content;
+    margin-bottom:14px;
+    padding:7px 10px;
+    border:1px solid #d7e6f8;
+    border-radius:999px;
+    background:rgba(255,255,255,.76);
+    color:var(--profile-theme,#2563eb);
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+
+  .showcase-copy h1{
+    max-width:420px;
+    margin:0;
+    color:#102146;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:clamp(38px,4.2vw,66px);
+    font-weight:700;
+    line-height:.94;
+    letter-spacing:-.055em;
+  }
+
+  .showcase-copy p{
+    max-width:380px;
+    margin:18px 0 0;
+    color:#69809f;
+    font-size:14px;
+    line-height:1.65;
+  }
+
+  .hand-note{
+    max-width:260px;
+    margin:28px 0 0 26px;
+    color:#7290b8;
+    font-family:"Segoe Print","Bradley Hand",cursive;
+    font-size:17px;
+    line-height:1.5;
+    transform:rotate(-4deg);
+  }
+
+  /* ---------- Upload ---------- */
+  .upload-panel{
+    position:relative;
+    z-index:3;
+    display:flex;
+    margin:0 !important;
+    padding:8px !important;
+    border:1px solid rgba(208,222,240,.9) !important;
+    border-radius:26px !important;
+    background:rgba(255,255,255,.82) !important;
+    box-shadow:0 18px 44px rgba(72,105,151,.11) !important;
+    backdrop-filter:blur(12px);
+  }
+
+  .upload-panel .drop{
+    width:100%;
+    min-height:100% !important;
+    border:1.5px dashed #9cc7ff !important;
+    border-radius:21px !important;
+    background:
+      radial-gradient(circle at 50% 35%,rgba(147,197,253,.15),transparent 26%),
+      linear-gradient(180deg,rgba(255,255,255,.84),rgba(247,251,255,.94)) !important;
+  }
+
+  .upload-panel .drop:hover{
+    transform:none !important;
+    border-color:var(--profile-theme,#2563eb) !important;
+    background:#fff !important;
+    box-shadow:inset 0 0 0 4px rgba(59,130,246,.045);
+  }
+
+  .upload-panel .drop-content{
+    max-width:560px !important;
+    padding:32px !important;
+  }
+
+  .upload-panel .upload-icon{
+    width:74px !important;
+    height:74px !important;
+    margin-bottom:18px !important;
+    border-radius:21px !important;
+    box-shadow:0 15px 30px var(--profile-theme-shadow,rgba(37,99,235,.22)) !important;
+  }
+
+  .upload-panel .drop strong{
+    color:#112348;
+    font-size:22px !important;
+  }
+
+  .upload-panel .drop > .drop-content > span:not(.upload-icon){
+    color:#7890ae !important;
+    font-size:13px !important;
+  }
+
+  .upload-format-note{
+    display:inline-flex !important;
+    width:max-content;
+    margin:13px auto 0;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#edf5ff;
+    color:#7a91ad !important;
+    font-size:10px !important;
+    font-weight:800;
+    letter-spacing:.03em;
+  }
+
+  .edge-bubble{
+    opacity:.35 !important;
+    filter:blur(7px) !important;
+  }
+
+  /* ---------- Right hero cards ---------- */
+  .showcase-aside{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    justify-content:center;
+  }
+
+  .quote-card,
+  .mini-cloud-card{
+    border:1px solid rgba(206,220,238,.85);
+    border-radius:21px;
+    background:rgba(255,255,255,.74);
+    box-shadow:0 12px 30px rgba(67,99,143,.08);
+    backdrop-filter:blur(12px);
+  }
+
+  .quote-card{
+    position:relative;
+    min-height:190px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px 20px;
+    overflow:hidden;
+  }
+
+  .quote-card::after{
+    content:"";
+    position:absolute;
+    width:120px;
+    height:120px;
+    right:-36px;
+    bottom:-45px;
+    border-radius:50%;
+    background:linear-gradient(135deg,rgba(59,130,246,.16),rgba(168,85,247,.10));
+  }
+
+  .quote-card p{
+    position:relative;
+    z-index:2;
+    margin:0;
+    color:#6b83a4;
+    font-family:"Segoe Print","Bradley Hand",cursive;
+    font-size:18px;
+    line-height:1.55;
+    text-align:center;
+    transform:rotate(-3deg);
+  }
+
+  .quote-mark{
+    position:absolute;
+    left:18px;
+    top:8px;
+    color:#dbeafe;
+    font-family:Georgia,serif;
+    font-size:72px;
+    line-height:1;
+  }
+
+  .quote-heart{
+    position:absolute;
+    right:24px;
+    bottom:19px;
+    z-index:2;
+    color:#95b1d5;
+    font-size:24px;
+    transform:rotate(8deg);
+  }
+
+  .mini-cloud-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px;
+  }
+
+  .mini-cloud-icon{
+    width:44px;
+    height:44px;
+    flex:0 0 auto;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:#e7f8ff;
+    color:#06b6d4;
+    font-size:24px;
+  }
+
+  .mini-cloud-card div{
+    min-width:0;
+  }
+
+  .mini-cloud-card strong{
+    display:block;
+    margin-bottom:4px;
+    color:#26364f;
+    font-size:11px;
+  }
+
+  .mini-cloud-card span{
+    display:block;
+    color:#91a0b3;
+    font-size:9px;
+    line-height:1.45;
+  }
+
+  /* ---------- Stats ---------- */
+  .summary-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:12px;
+    margin-bottom:14px;
+  }
+
+  .summary-card{
+    min-height:88px;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:13px;
+    padding:15px 17px;
+    border:1px solid #dce6f1;
+    border-radius:18px;
+    background:rgba(255,255,255,.91);
+    box-shadow:0 10px 28px rgba(66,95,135,.07);
+    text-align:left;
+  }
+
+  button.summary-card{
+    width:100%;
+    font:inherit;
+    cursor:pointer;
+  }
+
+  .summary-card:hover{
+    transform:translateY(-2px);
+    border-color:var(--profile-theme-border,#bfdbfe);
+    box-shadow:0 16px 30px rgba(66,95,135,.10);
+  }
+
+  .summary-icon{
+    width:45px;
+    height:45px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    font-size:20px;
+    font-weight:900;
+  }
+
+  .summary-photo{background:#e8f5ff;color:#0ea5e9}
+  .summary-star{background:#fff6df;color:#f59e0b}
+  .summary-mail{background:#edf3ff;color:#2563eb}
+  .summary-cloud{background:#e6fbfa;color:#14b8a6}
+
+  .summary-card div{
+    min-width:0;
+  }
+
+  .summary-card strong{
+    display:block;
+    overflow:hidden;
+    color:#172642;
+    font-size:18px;
+    font-weight:900;
+    line-height:1.1;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .summary-card span:not(.summary-icon):not(.summary-arrow){
+    display:block;
+    margin-top:4px;
+    color:#8594a9;
+    font-size:10px;
+    font-weight:700;
+  }
+
+  .summary-arrow{
+    color:#94a3b8;
+    font-size:24px;
+  }
+
+  .storage-summary{
+    grid-template-columns:auto 1fr;
+  }
+
+  .storage-copy i{
+    display:block;
+    height:4px;
+    margin-top:9px;
+    overflow:hidden;
+    border-radius:999px;
+    background:#e6edf6;
+  }
+
+  .storage-copy i b{
+    display:block;
+    width:62%;
+    height:100%;
+    border-radius:inherit;
+    background:linear-gradient(90deg,var(--profile-theme,#2563eb),var(--profile-theme-2,#60a5fa));
+  }
+
+  /* ---------- Filters ---------- */
+  .controls-shell{
+    position:sticky;
+    top:94px;
+    z-index:80;
+    margin-bottom:22px;
+    padding:10px;
+    border:1px solid rgba(211,223,238,.92);
+    border-radius:18px;
+    background:rgba(255,255,255,.86);
+    box-shadow:0 10px 28px rgba(62,91,131,.08);
+    backdrop-filter:blur(14px);
+  }
+
+  .controls-shell .controls{
+    display:grid !important;
+    grid-template-columns:minmax(260px,1.6fr) minmax(130px,.48fr) minmax(165px,.55fr) auto auto;
+    gap:9px !important;
+    margin:0 !important;
+    align-items:center;
+  }
+
+  .search,
+  .control-select,
+  .btn{
+    height:44px !important;
+    border-radius:12px !important;
+  }
+
+  .search,
+  .control-select{
+    border:1px solid #dce5f0 !important;
+    background:#fbfdff !important;
+  }
+
+  .control-select{
+    min-width:0 !important;
+    padding:0 34px 0 12px !important;
+    color:#536176;
+    font-size:11px;
+    font-weight:800;
+  }
+
+  .btn.light{
+    border:1px solid #e1e8f1 !important;
+    background:#f7f9fc !important;
+    color:#4d5b70 !important;
+    font-size:11px;
+  }
+
+  .fav-filter.active{
+    border-color:var(--profile-theme-border,#bfdbfe) !important;
+    background:var(--profile-theme-soft,#eaf2ff) !important;
+    color:var(--profile-theme-text,#1d4ed8) !important;
+  }
+
+  .danger-soft-btn:hover{
+    border-color:#fecaca !important;
+    background:#fff1f2 !important;
+    color:#dc2626 !important;
+  }
+
+  /* ---------- Gallery heading ---------- */
+  .gallery-heading{
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    gap:20px;
+    margin:0 2px 12px;
+  }
+
+  .gallery-kicker{
+    display:block;
+    margin-bottom:3px;
+    color:var(--profile-theme,#2563eb);
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+  }
+
+  .gallery-heading h2{
+    margin:0;
+    color:#152542;
+    font-size:23px;
+    font-weight:900;
+    letter-spacing:-.035em;
+  }
+
+  .collection-stats{
+    color:#8b98aa !important;
+    font-size:10px !important;
+    font-weight:800;
+  }
+
+  /* ---------- Gallery ---------- */
+  .gallery-grid{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:13px !important;
+    margin-top:0 !important;
+  }
+
+  .gallery-grid .card{
+    border:1px solid #dfe7f1 !important;
+    border-radius:17px !important;
+    background:#fff !important;
+    box-shadow:0 10px 26px rgba(61,89,129,.07) !important;
+    transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+  }
+
+  .gallery-grid .card:hover{
+    transform:translateY(-3px) !important;
+    border-color:#cddced !important;
+    box-shadow:0 18px 34px rgba(61,89,129,.11) !important;
+  }
+
+  .gallery-grid .photo{
+    height:225px !important;
+    transition:transform .55s cubic-bezier(.2,.8,.2,1) !important;
+  }
+
+  .gallery-grid .photo-wrap:hover .photo{
+    transform:scale(1.045) !important;
+  }
+
+  .gallery-grid .photo-badge{
+    display:none !important;
+  }
+
+  .gallery-grid .favorite-btn{
+    width:36px !important;
+    height:36px !important;
+    left:10px !important;
+    top:10px !important;
+    border:1px solid rgba(255,255,255,.72) !important;
+    border-radius:11px !important;
+    background:rgba(255,255,255,.88) !important;
+    box-shadow:0 5px 16px rgba(15,23,42,.13) !important;
+    backdrop-filter:blur(10px);
+  }
+
+  .gallery-grid .card-body{
+    padding:12px !important;
+  }
+
+  .gallery-grid .tags-head{
+    margin-bottom:7px !important;
+  }
+
+  .gallery-grid .label{
+    font-size:9px !important;
+  }
+
+  .gallery-grid .photo-owner{
+    font-size:9px !important;
+  }
+
+  .gallery-grid .tags-input{
+    min-height:39px !important;
+    border-radius:10px !important;
+    background:#f9fbfd !important;
+    font-size:11px !important;
+  }
+
+  .gallery-grid .tag-list{
+    min-height:0 !important;
+    margin-top:7px !important;
+  }
+
+  .gallery-grid .tag-chip{
+    padding:4px 7px !important;
+    border-radius:999px !important;
+    font-size:9px !important;
+  }
+
+  .gallery-grid .meta{
+    margin:8px 1px 9px !important;
+    font-size:9px !important;
+  }
+
+  .gallery-grid .actions{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:6px !important;
+  }
+
+  .gallery-grid .actions button{
+    min-width:0 !important;
+    padding:8px 4px !important;
+    border-radius:9px !important;
+    font-size:10px !important;
+  }
+
+  .gallery-grid .save{
+    background:#eef9f1 !important;
+    color:#15803d !important;
+  }
+
+  .gallery-grid .share{
+    background:#edf4ff !important;
+    color:#2563eb !important;
+  }
+
+  .gallery-grid .delete{
+    background:#fff1f2 !important;
+    color:#dc2626 !important;
+  }
+
+  .empty{
+    min-height:230px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    border:1px dashed #cbd9e9 !important;
+    border-radius:18px !important;
+    background:rgba(255,255,255,.68) !important;
+  }
+
+  .redesigned-footer{
+    margin-top:24px !important;
+    color:#9aa8ba !important;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:1180px){
+    .app-topbar{
+      grid-template-columns:1fr auto;
+    }
+
+    .main-nav{
+      order:3;
+      grid-column:1/-1;
+      justify-self:center;
+      margin-top:-2px;
+    }
+
+    .showcase{
+      grid-template-columns:minmax(240px,.8fr) minmax(460px,1.4fr);
+    }
+
+    .showcase-aside{
+      display:none;
+    }
+
+    .gallery-grid{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+
+    .summary-grid{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+  }
+
+  @media(max-width:840px){
+    .redesigned-home{
+      padding:10px 12px 40px !important;
+    }
+
+    .app-topbar{
+      position:relative;
+      top:auto;
+      grid-template-columns:1fr auto;
+      border-radius:17px;
+    }
+
+    .cloud-status{
+      display:none;
+    }
+
+    .main-nav{
+      width:100%;
+    }
+
+    .main-nav-item{
+      flex:1;
+      padding:0 10px;
+    }
+
+    .showcase{
+      grid-template-columns:1fr;
+      min-height:auto;
+      padding:14px;
+      border-radius:22px;
+    }
+
+    .showcase-copy{
+      padding:22px 15px 8px;
+      text-align:center;
+      align-items:center;
+    }
+
+    .showcase-copy h1{
+      font-size:46px;
+    }
+
+    .hand-note{
+      display:none;
+    }
+
+    .upload-panel{
+      min-height:310px;
+    }
+
+    .controls-shell{
+      position:relative;
+      top:auto;
+    }
+
+    .controls-shell .controls{
+      grid-template-columns:1fr 1fr !important;
+    }
+
+    .search-wrap{
+      grid-column:1/-1;
+    }
+
+    .gallery-grid{
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    }
+  }
+
+  @media(max-width:560px){
+    .logo-copy small{
+      display:none;
+    }
+
+    .topbar-actions{
+      gap:6px;
+    }
+
+    .showcase-copy h1{
+      font-size:38px;
+    }
+
+    .summary-grid{
+      grid-template-columns:1fr;
+    }
+
+    .controls-shell .controls{
+      grid-template-columns:1fr !important;
+    }
+
+    .search-wrap{
+      grid-column:auto;
+    }
+
+    .gallery-heading{
+      align-items:flex-start;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .gallery-grid{
+      grid-template-columns:1fr !important;
+    }
+
+    .gallery-grid .photo{
+      height:270px !important;
+    }
+  }
+</style>
+
+
+<style>
+  .profile-logo-button .logo-mark{
+    width:58px !important;
+    height:58px !important;
+    flex:0 0 58px !important;
+  }
+
+  .profile-logo-button .logo-layer{
+    border-radius:18px !important;
+  }
+
+  .profile-logo-button .logo-spark{
+    transform:scale(1.15);
+  }
+
+  .logo-copy{
+    gap:3px !important;
+  }
+
+  .profile-logo-button .logo-text{
+    line-height:1 !important;
+    letter-spacing:-0.04em !important;
+  }
+
+  .logo-copy small{
+    line-height:1.1 !important;
+  }
+
+  @media(max-width:560px){
+    .profile-logo-button .logo-mark{
+      width:48px !important;
+      height:48px !important;
+      flex-basis:48px !important;
+    }
+
+    .profile-logo-button .logo-text{
+      font-size:24px !important;
+    }
+
+    .logo-copy small{
+      display:block !important;
+      font-size:11px !important;
+    }
+  }
+</style>
+
+
+<style>
+  /* ===== Друзья ===== */
+  .topbar-friends{
+    position:relative;
+    width:58px;
+    height:58px;
+    display:grid;
+    place-items:center;
+    padding:0;
+    border:1px solid #dce6f2;
+    border-radius:17px;
+    background:#fff;
+    color:#46556c;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(62,91,131,.07);
+    transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease;
+  }
+
+  .topbar-friends:hover{
+    transform:translateY(-2px);
+    border-color:var(--profile-theme-border,#bfdbfe);
+    color:var(--profile-theme,#2563eb);
+    box-shadow:0 12px 24px rgba(62,91,131,.11);
+  }
+
+  .friends-icon{
+    width:27px;
+    height:27px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .friends-count-badge{
+    position:absolute;
+    right:-5px;
+    top:-5px;
+    min-width:21px;
+    height:21px;
+    display:grid;
+    place-items:center;
+    padding:0 6px;
+    border:2px solid #fff;
+    border-radius:999px;
+    background:var(--profile-theme,#2563eb);
+    color:#fff;
+    font-size:10px;
+    font-weight:900;
+    box-shadow:0 4px 10px rgba(15,23,42,.13);
+  }
+
+  .friends-backdrop{
+    position:fixed;
+    inset:0;
+    z-index:10750;
+    background:rgba(15,23,42,.28);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .28s ease,visibility 0s linear .28s;
+  }
+
+  .friends-backdrop.open{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transition:opacity .28s ease,visibility 0s linear 0s;
+  }
+
+  .friends-drawer{
+    position:fixed;
+    top:0;
+    right:-430px;
+    z-index:10800;
+    width:min(410px,94vw);
+    height:100dvh;
+    display:flex;
+    flex-direction:column;
+    padding:22px;
+    overflow:auto;
+    border-left:1px solid #d9e2ed;
+    background:#fff;
+    box-shadow:-20px 0 55px rgba(15,23,42,.17);
+    transition:right .42s cubic-bezier(.16,1,.3,1);
+  }
+
+  .friends-drawer.open{
+    right:0;
+  }
+
+  .friends-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    padding-bottom:16px;
+    border-bottom:1px solid #e5ebf3;
+  }
+
+  .friends-kicker{
+    margin-bottom:4px;
+    color:var(--profile-theme,#2563eb);
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+  }
+
+  .friends-head h2{
+    margin:0;
+    color:#17243b;
+    font-size:28px;
+    letter-spacing:-.04em;
+  }
+
+  .friends-close{
+    width:39px;
+    height:39px;
+    display:grid;
+    place-items:center;
+    border:1px solid #dae3ee;
+    border-radius:11px;
+    background:#fff;
+    color:#64748b;
+    font-size:24px;
+    cursor:pointer;
+  }
+
+  .friends-description{
+    padding:14px 2px 16px;
+    color:#7b8799;
+    font-size:12px;
+    line-height:1.55;
+  }
+
+  .friend-add-box{
+    padding:14px;
+    border:1px solid #dde6f1;
+    border-radius:16px;
+    background:#f9fbfe;
+  }
+
+  .friend-add-box label{
+    display:block;
+    margin-bottom:7px;
+    color:#39475d;
+    font-size:11px;
+    font-weight:900;
+  }
+
+  .friend-add-row{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:8px;
+  }
+
+  .friend-add-row input{
+    min-width:0;
+    height:42px;
+    padding:0 12px;
+    border:1px solid #d5dfeb;
+    border-radius:11px;
+    outline:none;
+    background:#fff;
+    color:#26354c;
+    font:inherit;
+    font-size:12px;
+  }
+
+  .friend-add-row input:focus{
+    border-color:var(--profile-theme,#2563eb);
+    box-shadow:0 0 0 3px var(--profile-theme-soft,#eaf2ff);
+  }
+
+  .friend-add-row button{
+    height:42px;
+    padding:0 13px;
+    border:0;
+    border-radius:11px;
+    background:var(--profile-theme,#2563eb);
+    color:#fff;
+    font:inherit;
+    font-size:11px;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  .friend-add-row button:disabled{
+    opacity:.6;
+    cursor:wait;
+  }
+
+  .friends-message{
+    min-height:15px;
+    margin-top:7px;
+    font-size:10px;
+    line-height:1.4;
+  }
+
+  .friends-message.success{color:#15803d}
+  .friends-message.error{color:#dc2626}
+
+  .friends-received{
+    width:100%;
+    min-height:68px;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:11px;
+    margin-top:12px;
+    padding:11px 12px;
+    border:1px solid #dfe7f1;
+    border-radius:15px;
+    background:#fff;
+    text-align:left;
+    cursor:pointer;
+  }
+
+  .friends-received:hover{
+    border-color:var(--profile-theme-border,#bfdbfe);
+    background:var(--profile-theme-soft,#f3f7ff);
+  }
+
+  .friends-received-icon{
+    position:relative;
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:#eef4ff;
+    color:#2563eb;
+  }
+
+  .friends-received-icon .inbox-envelope{
+    width:22px;
+    height:22px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+  }
+
+  .friends-received-icon .inbox-badge{
+    right:-7px;
+    top:-7px;
+  }
+
+  .friends-received-copy{
+    min-width:0;
+  }
+
+  .friends-received-copy strong{
+    display:block;
+    color:#27364d;
+    font-size:11px;
+  }
+
+  .friends-received-copy small{
+    display:block;
+    margin-top:3px;
+    color:#8b98aa;
+    font-size:9px;
+  }
+
+  .friends-chevron{
+    color:#98a5b7;
+    font-size:23px;
+  }
+
+  .friends-list-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:20px 2px 9px;
+    color:#59677c;
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+
+  .friends-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .friend-row{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:10px;
+    min-height:62px;
+    padding:10px;
+    border:1px solid #e0e7f0;
+    border-radius:14px;
+    background:#fff;
+  }
+
+  .friend-avatar{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:linear-gradient(135deg,var(--profile-theme,#2563eb),var(--profile-theme-2,#60a5fa));
+    color:#fff;
+    font-size:16px;
+    font-weight:900;
+    box-shadow:0 7px 15px var(--profile-theme-shadow,rgba(37,99,235,.16));
+  }
+
+  .friend-copy{
+    min-width:0;
+  }
+
+  .friend-copy strong{
+    display:block;
+    overflow:hidden;
+    color:#26354c;
+    font-size:12px;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .friend-copy span{
+    display:block;
+    margin-top:3px;
+    color:#9aa6b6;
+    font-size:9px;
+  }
+
+  .friend-remove{
+    height:32px;
+    padding:0 9px;
+    border:1px solid #fecaca;
+    border-radius:9px;
+    background:#fff5f5;
+    color:#dc2626;
+    font:inherit;
+    font-size:9px;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  .friends-empty{
+    padding:28px 14px;
+    border:1px dashed #d2ddea;
+    border-radius:14px;
+    background:#fbfdff;
+    color:#98a4b5;
+    font-size:11px;
+    line-height:1.55;
+    text-align:center;
+  }
+
+  @media(max-width:560px){
+    .topbar-friends{
+      width:50px;
+      height:50px;
+    }
+
+    .friends-drawer{
+      width:100%;
+      right:-100%;
+    }
+  }
+</style>
+
+
+<style>
+  /* Все кнопки теперь реагируют на наведение одинаково плавно */
+  button,
+  .btn{
+    transition:
+      transform .24s cubic-bezier(.16,1,.3,1),
+      background-color .24s ease,
+      border-color .24s ease,
+      color .24s ease,
+      box-shadow .24s ease,
+      opacity .24s ease,
+      filter .24s ease !important;
+    will-change:transform;
+  }
+
+  @media (hover:hover) and (pointer:fine){
+    button:not(:disabled):hover,
+    .btn:not(:disabled):hover{
+      transform:translateY(-1.5px);
+      filter:brightness(.985);
+    }
+
+    button:not(:disabled):active,
+    .btn:not(:disabled):active{
+      transform:translateY(0) scale(.975);
+      transition-duration:.09s !important;
+    }
+  }
+
+  button:disabled,
+  .btn:disabled{
+    transform:none !important;
+  }
+</style>
+
+
+<style>
+  /* Плавность для карточек "Всего фотографий" и "В избранном" */
+  .summary-card{
+    transition:
+      transform .26s cubic-bezier(.16,1,.3,1),
+      border-color .26s ease,
+      background-color .26s ease,
+      box-shadow .26s ease,
+      filter .26s ease !important;
+    will-change:transform;
+  }
+
+  .summary-card .summary-icon,
+  .summary-card .summary-arrow,
+  .summary-card strong,
+  .summary-card span{
+    transition:
+      transform .26s cubic-bezier(.16,1,.3,1),
+      color .26s ease,
+      background-color .26s ease,
+      opacity .26s ease !important;
+  }
+
+  @media (hover:hover) and (pointer:fine){
+    .summary-card:hover{
+      transform:translateY(-3px) !important;
+      border-color:var(--profile-theme-border,#bfdbfe) !important;
+      box-shadow:0 17px 32px rgba(66,95,135,.12) !important;
+      filter:brightness(.995);
+    }
+
+    .summary-card:hover .summary-icon{
+      transform:scale(1.06);
+    }
+
+    .summary-card:hover .summary-arrow{
+      transform:translateX(3px);
+      color:var(--profile-theme,#2563eb);
+    }
+
+    .summary-card:active{
+      transform:translateY(-1px) scale(.992) !important;
+      transition-duration:.1s !important;
+    }
+  }
+</style>
+
+
+<style>
+  .summary-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  @media(max-width:1180px){
+    .summary-grid{
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    }
+  }
+
+  @media(max-width:620px){
+    .summary-grid{
+      grid-template-columns:1fr !important;
+    }
+  }
+</style>
+
+
+<style>
+  .friend-requests-section{
+    margin-top:18px;
+  }
+
+  .request-head{
+    margin-top:0 !important;
+  }
+
+  .friend-requests-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .friend-request-row{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr);
+    gap:10px;
+    padding:11px;
+    border:1px solid #dfe7f1;
+    border-radius:14px;
+    background:#fff;
+  }
+
+  .friend-request-row.incoming{
+    border-color:var(--profile-theme-border,#bfdbfe);
+    background:linear-gradient(180deg,#fff,var(--profile-theme-soft,#f4f8ff));
+  }
+
+  .friend-request-copy{
+    min-width:0;
+  }
+
+  .friend-request-copy strong{
+    display:block;
+    overflow:hidden;
+    color:#26354c;
+    font-size:12px;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .friend-request-copy span{
+    display:block;
+    margin-top:3px;
+    color:#98a5b7;
+    font-size:9px;
+  }
+
+  .friend-request-actions{
+    grid-column:2;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    margin-top:7px;
+  }
+
+  .friend-request-actions.single{
+    grid-template-columns:1fr;
+  }
+
+  .friend-request-actions button{
+    min-height:34px;
+    border-radius:9px;
+    font:inherit;
+    font-size:9px;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  .friend-request-accept{
+    border:1px solid var(--profile-theme,#2563eb);
+    background:var(--profile-theme,#2563eb);
+    color:#fff;
+  }
+
+  .friend-request-decline,
+  .friend-request-cancel{
+    border:1px solid #fecaca;
+    background:#fff5f5;
+    color:#dc2626;
+  }
+
+  .friend-request-actions button:disabled{
+    opacity:.58;
+    cursor:wait;
+  }
+
+  .friends-count-badge.request-badge{
+    background:#ef4444;
+  }
+
+  .friend-remove{
+    transition:
+      transform .22s cubic-bezier(.16,1,.3,1),
+      background-color .22s ease,
+      border-color .22s ease,
+      color .22s ease,
+      box-shadow .22s ease !important;
+  }
+
+  .friend-remove:hover{
+    background:#fee2e2 !important;
+    border-color:#fca5a5 !important;
+    transform:translateY(-1px);
+  }
+</style>
+
+
+<style>
+  .friend-request-empty{
+    padding:14px 12px;
+    border:1px dashed #d7e0ec;
+    border-radius:12px;
+    background:#fbfdff;
+    color:#98a5b7;
+    font-size:10px;
+    line-height:1.45;
+    text-align:center;
+  }
+
+  .friend-request-empty.error{
+    border-color:#fecaca;
+    background:#fff7f7;
+    color:#dc2626;
+  }
+
+  .friend-remove.confirming{
+    border-color:#ef4444 !important;
+    background:#ef4444 !important;
+    color:#fff !important;
+  }
+</style>
+
+
+<style>
+  #incomingRequestsSection{
+    margin-top:12px !important;
+  }
+</style>
+
+
+<style>
+  /* Убираем именно внутреннюю полоску над поиском и фильтрами */
+  .controls-shell .controls,
+  .controls{
+    border-top:0 !important;
+    border-top-color:transparent !important;
+    box-shadow:none !important;
+  }
+</style>
+
+
+<style>
+  /* Правая часть hero: живые фотографии вместо цитаты */
+  .random-photo-aside{
+    display:flex !important;
+    align-items:stretch !important;
+    justify-content:stretch !important;
+  }
+
+  .random-photo-stack{
+    width:100%;
+    display:grid;
+    grid-template-rows:minmax(190px,1.5fr) minmax(110px,.8fr) auto;
+    gap:10px;
+  }
+
+  .random-photo-card{
+    position:relative;
+    display:block;
+    min-width:0;
+    overflow:hidden;
+    border:1px solid rgba(210,222,238,.92);
+    border-radius:18px;
+    background:#eaf2fb;
+    box-shadow:0 12px 28px rgba(59,84,120,.10);
+    text-decoration:none;
+    isolation:isolate;
+    transition:
+      transform .28s cubic-bezier(.16,1,.3,1),
+      box-shadow .28s ease,
+      border-color .28s ease !important;
+  }
+
+  .random-photo-card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    background:linear-gradient(180deg,transparent 48%,rgba(9,18,32,.43));
+    opacity:.65;
+    transition:opacity .28s ease;
+  }
+
+  .random-photo-card img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+    transform:scale(1.01);
+    transition:transform .65s cubic-bezier(.16,1,.3,1);
+  }
+
+  .random-photo-card:hover{
+    transform:translateY(-3px);
+    border-color:rgba(147,177,215,.9);
+    box-shadow:0 18px 34px rgba(59,84,120,.15);
+  }
+
+  .random-photo-card:hover img{
+    transform:scale(1.065);
+  }
+
+  .random-photo-card:hover::after{
+    opacity:.85;
+  }
+
+  .random-photo-main{
+    min-height:200px;
+  }
+
+  .random-photo-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    min-height:115px;
+  }
+
+  .random-photo-row .random-photo-card::after{
+    background:linear-gradient(180deg,transparent 62%,rgba(9,18,32,.30));
+  }
+
+  .random-photo-overlay{
+    position:absolute;
+    left:14px;
+    right:14px;
+    bottom:13px;
+    z-index:3;
+    color:#fff;
+    text-shadow:0 2px 10px rgba(0,0,0,.25);
+  }
+
+  .random-photo-overlay strong{
+    display:block;
+    font-size:12px;
+    font-weight:900;
+  }
+
+  .random-photo-overlay small{
+    display:block;
+    margin-top:3px;
+    color:rgba(255,255,255,.82);
+    font-size:9px;
+    font-weight:700;
+  }
+
+  .random-photo-caption{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:11px 13px;
+    border:1px solid rgba(210,222,238,.9);
+    border-radius:15px;
+    background:rgba(255,255,255,.78);
+    box-shadow:0 9px 22px rgba(59,84,120,.07);
+    backdrop-filter:blur(10px);
+  }
+
+  .random-photo-caption > span{
+    width:36px;
+    height:36px;
+    flex:0 0 auto;
+    display:grid;
+    place-items:center;
+    border-radius:11px;
+    background:var(--profile-theme-soft,#eaf2ff);
+    color:var(--profile-theme,#2563eb);
+    font-size:17px;
+  }
+
+  .random-photo-caption div{
+    min-width:0;
+  }
+
+  .random-photo-caption strong{
+    display:block;
+    color:#2a3950;
+    font-size:10px;
+  }
+
+  .random-photo-caption small{
+    display:block;
+    margin-top:3px;
+    color:#94a1b4;
+    font-size:8px;
+  }
+
+  @media(max-width:1180px){
+    .random-photo-aside{
+      display:none !important;
+    }
+  }
+</style>
+
+
+<style>
+  /* Возвращаем шарики из старой версии: появляются только при наведении */
+  .upload-panel .drop{
+    overflow:hidden !important;
+    isolation:isolate;
+  }
+
+  .upload-panel .drop > *:not(.edge-bubble){
+    position:relative;
+    z-index:2;
+  }
+
+  .upload-panel .edge-bubble{
+    z-index:1 !important;
+    opacity:0 !important;
+    transform:scale(.55) !important;
+    filter:blur(.2px) !important;
+    transition:
+      opacity .75s ease,
+      transform 1s cubic-bezier(.16,1,.3,1) !important;
+    will-change:transform,opacity;
+  }
+
+  /* Более мыльные большие шарики по бокам */
+  .upload-panel .bubble-13,
+  .upload-panel .bubble-14,
+  .upload-panel .bubble-15,
+  .upload-panel .bubble-16{
+    filter:blur(3.5px) saturate(.9) !important;
+    box-shadow:
+      inset 0 0 18px rgba(255,255,255,.55),
+      0 0 22px rgba(139,92,246,.10) !important;
+    backdrop-filter:blur(2px);
+  }
+
+  @media (hover:hover) and (pointer:fine){
+    .upload-panel .drop:hover .edge-bubble{
+      opacity:1 !important;
+    }
+
+    .upload-panel .drop:hover .bubble-1{
+      transform:scale(1) translate(14px,12px) !important;
+    }
+    .upload-panel .drop:hover .bubble-2{
+      transform:scale(1) translate(8px,-10px) !important;
+    }
+    .upload-panel .drop:hover .bubble-3{
+      transform:scale(1) translate(-12px,8px) !important;
+    }
+    .upload-panel .drop:hover .bubble-4{
+      transform:scale(1) translate(-14px,-12px) !important;
+    }
+    .upload-panel .drop:hover .bubble-5{
+      transform:scale(1) translate(5px,9px) !important;
+    }
+    .upload-panel .drop:hover .bubble-6{
+      transform:scale(1) translate(-7px,-8px) !important;
+    }
+    .upload-panel .drop:hover .bubble-7{
+      transform:scale(1) translateY(10px) !important;
+    }
+    .upload-panel .drop:hover .bubble-8{
+      transform:scale(1) translateY(12px) !important;
+    }
+    .upload-panel .drop:hover .bubble-9{
+      transform:scale(1) translateX(11px) !important;
+    }
+    .upload-panel .drop:hover .bubble-10{
+      transform:scale(1) translateX(-11px) !important;
+    }
+    .upload-panel .drop:hover .bubble-11{
+      transform:scale(1) translateY(-11px) !important;
+    }
+    .upload-panel .drop:hover .bubble-12{
+      transform:scale(1) translateY(-9px) !important;
+    }
+    .upload-panel .drop:hover .bubble-13{
+      opacity:.92 !important;
+      transform:scale(1) translateX(17px) !important;
+    }
+    .upload-panel .drop:hover .bubble-14{
+      opacity:.92 !important;
+      transform:scale(1) translateX(12px) !important;
+    }
+    .upload-panel .drop:hover .bubble-15{
+      opacity:.92 !important;
+      transform:scale(1) translateX(-18px) !important;
+    }
+    .upload-panel .drop:hover .bubble-16{
+      opacity:.92 !important;
+      transform:scale(1) translateX(-13px) !important;
+    }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .upload-panel .edge-bubble{
+      transition:opacity .2s ease !important;
+    }
+
+    .upload-panel .drop:hover .edge-bubble{
+      transform:none !important;
+    }
+  }
+</style>
+
 </head>
 <body>
 
@@ -3954,6 +6241,26 @@
           <span class="theme-dot theme-orange"></span>
           <span>Оранжевая</span>
         </button>
+        <button class="theme-option" type="button" data-theme-choice="black" aria-label="Чёрная тема">
+          <span class="theme-dot theme-black"></span>
+          <span>Чёрная</span>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="cyan" aria-label="Голубая тема">
+          <span class="theme-dot theme-cyan"></span>
+          <span>Голубая</span>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="indigo" aria-label="Индиго тема">
+          <span class="theme-dot theme-indigo"></span>
+          <span>Индиго</span>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="yellow" aria-label="Жёлтая тема">
+          <span class="theme-dot theme-yellow"></span>
+          <span>Жёлтая</span>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="gray" aria-label="Серая тема">
+          <span class="theme-dot theme-gray"></span>
+          <span>Серая</span>
+        </button>
       </div>
       <div class="profile-hint">Тема сохраняется в аккаунте и применяется после следующего входа.</div>
     </section>
@@ -3979,36 +6286,43 @@
     </button>
   </aside>
 
-  <main class="wrap">
-    <header class="hero">
-      <div>
-        <button class="eyebrow logo-badge hero-badge profile-logo-button" id="profileLogoButton" type="button" aria-label="Открыть профиль" title="Открыть профиль">
-  <span class="logo-mark" aria-hidden="true">
-    <span class="logo-layer layer-back"></span>
-    <span class="logo-layer layer-front"></span>
-    <span class="logo-spark"></span>
-  </span>
-  <span class="logo-text">Photo Finder</span>
-</button>
-        <p class="sub">Загружай фотографии, добавляй теги и избранное. Коллекция хранится в облаке и доступна после входа.</p>
-      </div>
-      <div class="hero-counters">
-        <div class="counter">
-          <strong id="photoCount">0</strong>
-          <span>фотографий</span>
-        </div>
-        <div class="counter favorite-counter">
-          <strong id="favoriteCount">0</strong>
-          <span>избранных</span>
-        </div>
 
-        <button class="inbox-button" id="inboxButton" type="button" aria-label="Открыть полученные фотографии" title="Полученные фотографии">
-          <svg class="inbox-envelope" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 6.5h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"></path>
-            <path d="m3.2 8 7.4 5.7a2.25 2.25 0 0 0 2.8 0L20.8 8"></path>
+  <main class="wrap redesigned-home" id="homeTop">
+    <header class="hero app-topbar">
+      <button class="eyebrow logo-badge hero-badge profile-logo-button" id="profileLogoButton" type="button" aria-label="Открыть профиль" title="Открыть профиль">
+        <span class="logo-mark" aria-hidden="true">
+          <span class="logo-layer layer-back"></span>
+          <span class="logo-layer layer-front"></span>
+          <span class="logo-spark"></span>
+        </span>
+        <span class="logo-copy">
+          <span class="logo-text">Photo Finder</span>
+          <small>твои моменты всегда рядом</small>
+        </span>
+      </button>
+
+      <nav class="main-nav" aria-label="Навигация">
+        <button class="main-nav-item active" id="navHome" type="button">Главная</button>
+        <button class="main-nav-item" id="navPhotos" type="button">Фото</button>
+        <button class="main-nav-item" id="navFavorites" type="button">Избранное</button>
+      </nav>
+
+      <div class="topbar-actions">
+        <button class="friends-button topbar-friends" id="friendsButton" type="button" aria-label="Открыть список друзей" title="Друзья">
+          <svg class="friends-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9.2 11.2a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+            <path d="M2.8 20.4v-1.7c0-3.1 2.7-5.6 6-5.6h.8c3.3 0 6 2.5 6 5.6v1.7"></path>
+            <path d="M16.1 10.5a3.3 3.3 0 1 0-.2-6.4"></path>
+            <path d="M16.7 13.3c2.6.4 4.5 2.4 4.5 4.9v1.4"></path>
           </svg>
-          <span class="inbox-badge" id="inboxBadge" hidden>0</span>
+          <span class="friends-count-badge" id="friendsBadge" hidden>0</span>
         </button>
+
+        <div class="cloud-status" aria-label="Облачное хранилище подключено">
+          <span class="cloud-dot"></span>
+          <span>Облако</span>
+          <small>подключено</small>
+        </div>
 
         <div class="account-pill" id="accountPill" hidden>
           <span id="accountEmail"></span>
@@ -4017,40 +6331,140 @@
       </div>
     </header>
 
-    <section class="panel">
-      <label class="drop" id="dropZone" for="fileInput">
+    <section class="showcase">
+      <div class="showcase-copy">
+        <span class="showcase-kicker">Личная фотоколлекция</span>
+        <h1>Больше,<br>чем просто фото</h1>
+        <p>Храни, находи и делись моментами, к которым хочется возвращаться.</p>
+        <div class="hand-note">Воспоминания делают жизнь ярче ♡</div>
+      </div>
 
-        <span class="edge-bubble bubble-1" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-2" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-3" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-4" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-5" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-6" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-7" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-8" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-9" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-10" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-11" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-12" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-13" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-14" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-15" aria-hidden="true"></span>
-        <span class="edge-bubble bubble-16" aria-hidden="true"></span>
+      <section class="panel upload-panel">
+        <label class="drop" id="dropZone" for="fileInput">
+          <span class="edge-bubble bubble-1" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-2" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-3" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-4" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-5" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-6" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-7" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-8" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-9" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-10" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-11" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-12" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-13" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-14" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-15" aria-hidden="true"></span>
+          <span class="edge-bubble bubble-16" aria-hidden="true"></span>
 
-        <div class="drop-content">
-<div class="upload-icon camera-icon" aria-hidden="true">
-  <span class="lens-outer"></span>
-  <span class="lens-middle"></span>
-  <span class="lens-inner"></span>
-  <span class="lens-glass"></span>
-  <span class="lens-spark"></span>
-</div>
-          <strong>Добавить фотографии</strong>
-          <span>Нажми сюда или перетащи изображения в эту область.<br><em>Можно выбрать сразу несколько.</em></span>
+          <div class="drop-content">
+            <div class="upload-icon camera-icon" aria-hidden="true">
+              <span class="lens-outer"></span>
+              <span class="lens-middle"></span>
+              <span class="lens-inner"></span>
+              <span class="lens-glass"></span>
+              <span class="lens-spark"></span>
+            </div>
+            <strong>Добавь свои фотографии</strong>
+            <span>Перетащи изображения сюда или выбери их на устройстве.<br><em>Можно загрузить сразу несколько.</em></span>
+            <span class="upload-format-note">JPG · PNG · WEBP · GIF</span>
+          </div>
+        </label>
+        <input id="fileInput" type="file" accept="image/*" multiple />
+      </section>
+
+      <aside class="showcase-aside random-photo-aside">
+        <div class="random-photo-stack">
+          <a
+            class="random-photo-card random-photo-main"
+            href="https://unsplash.com/photos/a-waterfall-with-a-mountain-in-the-background-LxCwqciEfu0"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Открыть фотографию"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1682547095516-5f6272c1304e?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=70&w=1200"
+              alt="Горы и водопад"
+              loading="lazy"
+            >
+            <span class="random-photo-overlay">
+              <strong>Случайный момент</strong>
+              <small>Исландия</small>
+            </span>
+          </a>
+
+          <div class="random-photo-row">
+            <a
+              class="random-photo-card"
+              href="https://unsplash.com/photos/a-lake-with-trees-and-mountains-in-the-background-mVA0YQrIjN8"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Открыть фотографию"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1664902549556-695d79b0a2de?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=70&w=800"
+                alt="Озеро и горы"
+                loading="lazy"
+              >
+            </a>
+
+            <a
+              class="random-photo-card"
+              href="https://unsplash.com/photos/a-blue-lake-surrounded-by-mountains-and-trees-rel8imrx88E"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Открыть фотографию"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1724056638734-d00bb32dad20?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=70&w=800"
+                alt="Голубое горное озеро"
+                loading="lazy"
+              >
+            </a>
+          </div>
+
+          <div class="random-photo-caption">
+            <span>✦</span>
+            <div>
+              <strong>Немного вдохновения</strong>
+              <small>Случайные фотографии из интернета</small>
+            </div>
+          </div>
         </div>
-      </label>
-      <input id="fileInput" type="file" accept="image/*" multiple />
+      </aside>
+    </section>
 
+    <section class="summary-grid" aria-label="Статистика коллекции">
+      <article class="summary-card">
+        <span class="summary-icon summary-photo">▣</span>
+        <div>
+          <strong id="photoCount">0</strong>
+          <span>Всего фотографий</span>
+        </div>
+        <span class="summary-arrow">›</span>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-icon summary-star">★</span>
+        <div>
+          <strong id="favoriteCount">0</strong>
+          <span>В избранном</span>
+        </div>
+        <span class="summary-arrow">›</span>
+      </article>
+
+      <button class="summary-card summary-button" id="receivedShortcut" type="button">
+        <span class="summary-icon summary-mail">✉</span>
+        <div>
+          <strong>Полученные</strong>
+          <span>Открыть конверт</span>
+        </div>
+        <span class="summary-arrow">›</span>
+      </button>
+    </section>
+
+    <section class="controls-shell" id="galleryControls">
       <div class="controls">
         <div class="search-wrap">
           <span class="search-icon">⌕</span>
@@ -4068,15 +6482,55 @@
         </select>
 
         <button class="btn light fav-filter" id="favOnly" type="button" aria-pressed="false">☆ Избранное</button>
-        <button class="btn light" id="clearAll" type="button">Удалить всё</button>
-
-        <div class="collection-stats" id="collectionStats">0 фотографий</div>
+        <button class="btn light danger-soft-btn" id="clearAll" type="button">Удалить всё</button>
       </div>
     </section>
 
-    <section class="grid" id="grid"></section>
-    <div class="footer-note">Фотографии сохраняются в облаке и доступны после входа в аккаунт.</div>
+    <section class="gallery-heading">
+      <div>
+        <span class="gallery-kicker">Твоя коллекция</span>
+        <h2>Последние фотографии</h2>
+      </div>
+      <div class="collection-stats" id="collectionStats">0 фотографий</div>
+    </section>
+
+    <section class="grid gallery-grid" id="grid"></section>
+
+    <div class="footer-note redesigned-footer">
+      Фотографии сохраняются в облаке и доступны после входа в аккаунт.
+    </div>
   </main>
+
+
+  <div class="delete-all-modal" id="deleteAllModal" aria-hidden="true">
+    <div class="delete-all-dialog" role="dialog" aria-modal="true" aria-labelledby="deleteAllTitle">
+      <div class="delete-all-icon" aria-hidden="true">!</div>
+      <h3 id="deleteAllTitle">Удалить все фотографии?</h3>
+      <p>
+        Все фотографии, теги и избранное будут удалены из твоей облачной коллекции.
+        Это действие нельзя отменить.
+      </p>
+
+      <div class="delete-all-actions">
+        <button class="delete-all-cancel" id="deleteAllCancel" type="button">Отмена</button>
+        <button class="delete-all-confirm" id="deleteAllConfirm" type="button">Удалить всё</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="decline-modal" id="declineModal" aria-hidden="true">
+    <div class="decline-dialog" role="dialog" aria-modal="true" aria-labelledby="declineTitle">
+      <div class="decline-icon" aria-hidden="true">✕</div>
+      <h3 id="declineTitle">Отказаться от фотографии?</h3>
+      <p id="declineText">Фотография исчезнет из твоего конвертика.</p>
+
+      <div class="decline-actions">
+        <button class="decline-cancel" id="declineCancel" type="button">Отмена</button>
+        <button class="decline-confirm" id="declineConfirm" type="button">Отказаться</button>
+      </div>
+    </div>
+  </div>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр фотографии">
     <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Закрыть">×</button>
@@ -4115,6 +6569,57 @@
     </div>
   </div>
 
+  <div class="friends-backdrop" id="friendsBackdrop"></div>
+  <aside class="friends-drawer" id="friendsDrawer" aria-hidden="true">
+    <div class="friends-head">
+      <div>
+        <div class="friends-kicker">Photo Finder</div>
+        <h2>Друзья</h2>
+      </div>
+      <button class="friends-close" id="friendsClose" type="button" aria-label="Закрыть">×</button>
+    </div>
+
+    <div class="friends-description">
+      Отправляй запросы в друзья по юзернейму. Пользователь появится в списке друзей только после того, как примет запрос.
+    </div>
+
+    <div class="friend-add-box">
+      <label for="friendUsernameInput">Отправить запрос в друзья</label>
+      <div class="friend-add-row">
+        <input id="friendUsernameInput" type="text" maxlength="24" autocomplete="off" placeholder="Например: Egornoobass67">
+        <button id="friendAddButton" type="button">Отправить</button>
+      </div>
+      <div class="friends-message" id="friendsMessage"></div>
+    </div>
+
+    <button id="inboxButton" type="button" hidden aria-hidden="true">
+      <span id="inboxBadge" hidden>0</span>
+    </button>
+
+    <section class="friend-requests-section" id="incomingRequestsSection">
+      <div class="friends-list-head request-head">
+        <span>Запросы в друзья</span>
+        <span id="incomingRequestsCountText">0</span>
+      </div>
+      <div class="friend-requests-list" id="incomingRequestsList"></div>
+    </section>
+
+    <section class="friend-requests-section" id="outgoingRequestsSection">
+      <div class="friends-list-head request-head">
+        <span>Отправленные запросы</span>
+        <span id="outgoingRequestsCountText">0</span>
+      </div>
+      <div class="friend-requests-list" id="outgoingRequestsList"></div>
+    </section>
+
+    <div class="friends-list-head">
+      <span>Мои друзья</span>
+      <span id="friendsCountText">0</span>
+    </div>
+
+    <div class="friends-list" id="friendsList"></div>
+  </aside>
+
   <div class="inbox-backdrop" id="inboxBackdrop"></div>
   <aside class="inbox-drawer" id="inboxDrawer" aria-hidden="true">
     <div class="inbox-head">
@@ -4141,6 +6646,9 @@
     const grid = document.getElementById('grid');
     const search = document.getElementById('search');
     const clearAll = document.getElementById('clearAll');
+    const deleteAllModal = document.getElementById('deleteAllModal');
+    const deleteAllCancel = document.getElementById('deleteAllCancel');
+    const deleteAllConfirm = document.getElementById('deleteAllConfirm');
     const photoCount = document.getElementById('photoCount');
     const favoriteCountEl = document.getElementById('favoriteCount');
     const lightbox = document.getElementById('lightbox');
@@ -4151,12 +6659,35 @@
     const favOnly = document.getElementById('favOnly');
     const collectionStats = document.getElementById('collectionStats');
 
+    const friendsButton = document.getElementById('friendsButton');
+    const friendsBadge = document.getElementById('friendsBadge');
+    const friendsBackdrop = document.getElementById('friendsBackdrop');
+    const friendsDrawer = document.getElementById('friendsDrawer');
+    const friendsClose = document.getElementById('friendsClose');
+    const friendUsernameInput = document.getElementById('friendUsernameInput');
+    const friendAddButton = document.getElementById('friendAddButton');
+    const friendsMessage = document.getElementById('friendsMessage');
+    const friendsList = document.getElementById('friendsList');
+    const friendsCountText = document.getElementById('friendsCountText');
+
+    const incomingRequestsSection = document.getElementById('incomingRequestsSection');
+    const incomingRequestsList = document.getElementById('incomingRequestsList');
+    const incomingRequestsCountText = document.getElementById('incomingRequestsCountText');
+    const outgoingRequestsSection = document.getElementById('outgoingRequestsSection');
+    const outgoingRequestsList = document.getElementById('outgoingRequestsList');
+    const outgoingRequestsCountText = document.getElementById('outgoingRequestsCountText');
+
     const inboxButton = document.getElementById('inboxButton');
     const inboxBadge = document.getElementById('inboxBadge');
     const inboxBackdrop = document.getElementById('inboxBackdrop');
     const inboxDrawer = document.getElementById('inboxDrawer');
     const inboxClose = document.getElementById('inboxClose');
     const inboxList = document.getElementById('inboxList');
+
+    const declineModal = document.getElementById('declineModal');
+    const declineText = document.getElementById('declineText');
+    const declineCancel = document.getElementById('declineCancel');
+    const declineConfirm = document.getElementById('declineConfirm');
 
     const shareModal = document.getElementById('shareModal');
     const shareClose = document.getElementById('shareClose');
@@ -4228,6 +6759,7 @@
       : null;
 
     let currentUser = null;
+    let currentUsername = '';
     let items = [];
     let favoriteOnly = false;
     let busy = false;
@@ -4235,6 +6767,419 @@
     let activeSharePhoto = null;
     let receivedItems = [];
     let inboxPollTimer = null;
+
+    let friendItems = [];
+    let incomingFriendRequests = [];
+    let outgoingFriendRequests = [];
+
+    function setFriendsMessage(message = '', type = ''){
+      friendsMessage.textContent = message;
+      friendsMessage.className = 'friends-message' + (type ? ` ${type}` : '');
+    }
+
+    function updateFriendsCount(){
+      friendsCountText.textContent = String(friendItems.length);
+
+      const pendingCount = incomingFriendRequests.length;
+      friendsBadge.textContent = pendingCount > 99 ? '99+' : String(pendingCount);
+      friendsBadge.hidden = pendingCount < 1;
+      friendsBadge.classList.toggle('request-badge',pendingCount > 0);
+    }
+
+    function renderFriends(){
+      updateFriendsCount();
+
+      if(!friendItems.length){
+        friendsList.innerHTML = `
+          <div class="friends-empty">
+            Здесь пока никого нет.<br>
+            Отправь запрос в друзья и дождись, пока пользователь его примет.
+          </div>
+        `;
+        return;
+      }
+
+      friendsList.innerHTML = friendItems.map(friend => {
+        const username = String(friend.username || 'Пользователь');
+        const letter = escapeHtml((username[0] || 'P').toUpperCase());
+
+        return `
+          <div class="friend-row">
+            <div class="friend-avatar">${letter}</div>
+            <div class="friend-copy">
+              <strong>@${escapeHtml(username)}</strong>
+              <span>Друг в Photo Finder</span>
+            </div>
+            <button
+              class="friend-remove"
+              type="button"
+              data-remove-friend="${escapeHtml(friend.friend_id)}"
+            >Удалить</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderFriendRequests(){
+      incomingRequestsCountText.textContent = String(incomingFriendRequests.length);
+      outgoingRequestsCountText.textContent = String(outgoingFriendRequests.length);
+
+      // Разделы видны всегда — даже когда заявок нет.
+      incomingRequestsSection.hidden = false;
+      outgoingRequestsSection.hidden = false;
+
+      if(incomingFriendRequests.length){
+        incomingRequestsList.innerHTML = incomingFriendRequests.map(request => {
+          const username = String(request.username || 'Пользователь');
+          const letter = escapeHtml((username[0] || 'P').toUpperCase());
+
+          return `
+            <div class="friend-request-row incoming">
+              <div class="friend-avatar">${letter}</div>
+              <div class="friend-request-copy">
+                <strong>@${escapeHtml(username)}</strong>
+                <span>Хочет добавить тебя в друзья</span>
+              </div>
+
+              <div class="friend-request-actions">
+                <button
+                  class="friend-request-accept"
+                  type="button"
+                  data-accept-request="${escapeHtml(request.request_id)}"
+                >Принять</button>
+
+                <button
+                  class="friend-request-decline"
+                  type="button"
+                  data-decline-request="${escapeHtml(request.request_id)}"
+                >Отклонить</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }else{
+        incomingRequestsList.innerHTML = `
+          <div class="friend-request-empty">
+            Новых запросов пока нет.
+          </div>
+        `;
+      }
+
+      if(outgoingFriendRequests.length){
+        outgoingRequestsList.innerHTML = outgoingFriendRequests.map(request => {
+          const username = String(request.username || 'Пользователь');
+          const letter = escapeHtml((username[0] || 'P').toUpperCase());
+
+          return `
+            <div class="friend-request-row">
+              <div class="friend-avatar">${letter}</div>
+              <div class="friend-request-copy">
+                <strong>@${escapeHtml(username)}</strong>
+                <span>Ожидает ответа</span>
+              </div>
+
+              <div class="friend-request-actions single">
+                <button
+                  class="friend-request-cancel"
+                  type="button"
+                  data-cancel-request="${escapeHtml(request.request_id)}"
+                >Отменить запрос</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }else{
+        outgoingRequestsList.innerHTML = `
+          <div class="friend-request-empty">
+            Ты пока никому не отправлял запрос.
+          </div>
+        `;
+      }
+
+      updateFriendsCount();
+    }
+
+    async function loadFriends(){
+      if(!sb || !currentUser) return;
+
+      try{
+        const { data, error } = await sb.rpc('get_my_friends');
+
+        if(error) throw error;
+
+        friendItems = (data || []).map(row => ({
+          friend_id:row.friend_id,
+          username:row.username || 'Пользователь',
+          added_at:row.added_at || null
+        }));
+
+        renderFriends();
+      }catch(error){
+        console.error('Не удалось загрузить друзей:',error);
+        friendItems = [];
+        renderFriends();
+
+        setFriendsMessage(
+          'Система друзей ещё не настроена. Запусти friend_requests_setup.sql в Supabase.',
+          'error'
+        );
+      }
+    }
+
+    async function loadFriendRequests(options = {}){
+      if(!sb || !currentUser) return;
+
+      try{
+        const { data, error } = await sb.rpc('get_friend_requests');
+
+        if(error) throw error;
+
+        incomingFriendRequests = [];
+        outgoingFriendRequests = [];
+
+        (data || []).forEach(row => {
+          const item = {
+            request_id:row.request_id,
+            user_id:row.other_user_id,
+            username:row.username || 'Пользователь',
+            created_at:row.created_at || null
+          };
+
+          if(row.direction === 'incoming'){
+            incomingFriendRequests.push(item);
+          }else{
+            outgoingFriendRequests.push(item);
+          }
+        });
+
+        renderFriendRequests();
+      }catch(error){
+        console.error('Не удалось загрузить запросы в друзья:',error);
+
+        incomingFriendRequests = [];
+        outgoingFriendRequests = [];
+        renderFriendRequests();
+
+        incomingRequestsList.innerHTML = `
+          <div class="friend-request-empty error">
+            Запросы ещё не подключены к Supabase.
+          </div>
+        `;
+
+        if(!options.silent){
+          setFriendsMessage(
+            'Запусти friend_requests_setup_v2.sql в Supabase один раз.',
+            'error'
+          );
+        }
+      }
+    }
+
+    async function addFriend(){
+      if(!sb || !currentUser) return;
+
+      const username = normalizeUsername(friendUsernameInput.value);
+
+      if(!isValidUsername(username)){
+        setFriendsMessage('Введи корректный юзернейм.', 'error');
+        return;
+      }
+
+      friendAddButton.disabled = true;
+      friendAddButton.textContent = 'Отправляем…';
+      setFriendsMessage('');
+
+      try{
+        const { error } = await sb.rpc('send_friend_request', {
+          p_username:username
+        });
+
+        if(error) throw error;
+
+        friendUsernameInput.value = '';
+        setFriendsMessage(`Запрос для @${username} отправлен.`, 'success');
+        await loadFriendRequests({ silent:true });
+      }catch(error){
+        console.error(error);
+
+        const message = String(error?.message || '').toLowerCase();
+
+        if(message.includes('cannot_add_yourself')){
+          setFriendsMessage('Себя добавить в друзья нельзя.', 'error');
+        }else if(message.includes('user_not_found')){
+          setFriendsMessage('Пользователь с таким юзернеймом не найден.', 'error');
+        }else if(message.includes('already_friend')){
+          setFriendsMessage('Этот пользователь уже у тебя в друзьях.', 'error');
+        }else if(message.includes('request_already_sent')){
+          setFriendsMessage('Ты уже отправил этому пользователю запрос.', 'error');
+        }else if(message.includes('incoming_request_exists')){
+          setFriendsMessage('Этот пользователь уже отправил запрос тебе — прими его ниже.', 'error');
+        }else{
+          setFriendsMessage('Не удалось отправить запрос в друзья.', 'error');
+        }
+      }finally{
+        friendAddButton.disabled = false;
+        friendAddButton.textContent = 'Отправить';
+      }
+    }
+
+    async function respondToFriendRequest(requestId, accept){
+      if(!sb || !currentUser || !requestId) return;
+
+      try{
+        const { error } = await sb.rpc('respond_friend_request', {
+          p_request_id:requestId,
+          p_accept:Boolean(accept)
+        });
+
+        if(error) throw error;
+
+        setFriendsMessage(
+          accept ? 'Запрос принят — пользователь добавлен в друзья.' : 'Запрос отклонён.',
+          'success'
+        );
+
+        await Promise.all([
+          loadFriends(),
+          loadFriendRequests({ silent:true })
+        ]);
+      }catch(error){
+        console.error(error);
+        setFriendsMessage(
+          accept ? 'Не удалось принять запрос.' : 'Не удалось отклонить запрос.',
+          'error'
+        );
+      }
+    }
+
+    async function cancelFriendRequest(requestId){
+      if(!sb || !currentUser || !requestId) return;
+
+      try{
+        const { error } = await sb.rpc('cancel_friend_request', {
+          p_request_id:requestId
+        });
+
+        if(error) throw error;
+
+        setFriendsMessage('Запрос отменён.', 'success');
+        await loadFriendRequests({ silent:true });
+      }catch(error){
+        console.error(error);
+        setFriendsMessage('Не удалось отменить запрос.', 'error');
+      }
+    }
+
+    async function removeFriend(friendId){
+      if(!sb || !currentUser || !friendId) return;
+
+      const friend = friendItems.find(
+        item => String(item.friend_id) === String(friendId)
+      );
+
+      const username = friend?.username || 'пользователя';
+      const button = friendsList.querySelector(
+        `[data-remove-friend="${CSS.escape(String(friendId))}"]`
+      );
+
+      if(button?.dataset.confirmDelete !== '1'){
+        if(button){
+          button.dataset.confirmDelete = '1';
+          button.textContent = 'Точно удалить?';
+          button.classList.add('confirming');
+
+          setTimeout(() => {
+            if(button?.isConnected && button.dataset.confirmDelete === '1'){
+              button.dataset.confirmDelete = '';
+              button.textContent = 'Удалить';
+              button.classList.remove('confirming');
+            }
+          },3500);
+        }
+        return;
+      }
+
+      if(button){
+        button.disabled = true;
+        button.textContent = 'Удаляем…';
+      }
+
+      try{
+        let removed = false;
+
+        // Основной вариант — удаляет дружбу у обоих пользователей.
+        const { error:rpcError } = await sb.rpc('remove_friendship', {
+          p_friend_id:friendId
+        });
+
+        if(!rpcError){
+          removed = true;
+        }else{
+          console.warn('remove_friendship RPC недоступен, используем fallback:',rpcError);
+
+          // Fallback для старой базы.
+          const { data:deletedRows, error:directError } = await sb
+            .from('friends')
+            .delete()
+            .eq('user_id',currentUser.id)
+            .eq('friend_id',friendId)
+            .select('friend_id');
+
+          if(directError) throw directError;
+          removed = Array.isArray(deletedRows) && deletedRows.length > 0;
+        }
+
+        if(!removed){
+          throw new Error('friendship_not_removed');
+        }
+
+        friendItems = friendItems.filter(
+          item => String(item.friend_id) !== String(friendId)
+        );
+
+        renderFriends();
+        setFriendsMessage(`@${username} удалён из друзей.`, 'success');
+
+        // Подтягиваем актуальные данные с сервера.
+        setTimeout(() => {
+          loadFriends();
+        },250);
+      }catch(error){
+        console.error('Не удалось удалить друга:',error);
+
+        if(button){
+          button.disabled = false;
+          button.dataset.confirmDelete = '';
+          button.textContent = 'Удалить';
+          button.classList.remove('confirming');
+        }
+
+        setFriendsMessage(
+          'Не удалось удалить друга. Запусти friend_requests_setup_v2.sql в Supabase.',
+          'error'
+        );
+      }
+    }
+
+    function openFriends(){
+      friendsDrawer.classList.add('open');
+      friendsBackdrop.classList.add('open');
+      friendsDrawer.setAttribute('aria-hidden','false');
+      setFriendsMessage('');
+
+      Promise.all([
+        loadFriends(),
+        loadFriendRequests({ silent:true })
+      ]);
+
+      setTimeout(() => friendUsernameInput.focus(),120);
+    }
+
+    function closeFriends(){
+      friendsDrawer.classList.remove('open');
+      friendsBackdrop.classList.remove('open');
+      friendsDrawer.setAttribute('aria-hidden','true');
+    }
 
     function setBusy(state){
       busy = state;
@@ -4423,7 +7368,7 @@
     }
 
 
-    const ALLOWED_THEMES = ['blue','violet','emerald','rose','orange'];
+    const ALLOWED_THEMES = ['blue','violet','emerald','rose','orange','black','cyan','indigo','yellow','gray'];
 
     function setProfileMessage(message = '', type = ''){
       profileMessage.textContent = message;
@@ -4527,13 +7472,17 @@
           currentUser?.user_metadata?.username ||
           '';
 
-        profileUsername.value = username;
-        profileAccountName.textContent =
+        currentUsername =
           username ||
           (currentUser?.email ? currentUser.email.split('@')[0] : 'Пользователь');
 
-        const avatarSource = username || currentUser?.email || 'P';
+        profileUsername.value = username;
+        profileAccountName.textContent = currentUsername;
+
+        const avatarSource = currentUsername || currentUser?.email || 'P';
         profileAvatar.textContent = avatarSource[0].toUpperCase();
+
+        updateVisiblePhotoOwners();
       }catch(error){
         console.warn('Не удалось загрузить юзернейм:', error);
 
@@ -4541,7 +7490,9 @@
           currentUser?.user_metadata?.username ||
           (currentUser?.email ? currentUser.email.split('@')[0] : 'Пользователь');
 
+        currentUsername = fallbackUsername;
         profileAccountName.textContent = fallbackUsername;
+        updateVisiblePhotoOwners();
       }
     }
 
@@ -4883,6 +7834,11 @@
                   data-save-received="${index}"
                   ${item.alreadySaved ? 'disabled' : ''}
                 >${item.alreadySaved ? '✓ Сохранено' : 'Сохранить себе'}</button>
+                <button
+                  class="received-decline"
+                  type="button"
+                  data-decline-received="${index}"
+                >Отказаться</button>
               </div>
             </div>
           </article>
@@ -4933,7 +7889,8 @@
             storage_path:newPath,
             tags:item.tags || '',
             favorite:false,
-            source_photo_id:item.photoId
+            source_photo_id:item.photoId,
+            received_from_username:item.senderUsername
           });
 
         if(insertError){
@@ -4967,6 +7924,113 @@
       }
     }
 
+    let pendingDeclineShareId = '';
+    let declineInProgress = false;
+
+    function openDeclineModal(index){
+      const item = receivedItems[index];
+      if(!item || declineInProgress) return;
+
+      pendingDeclineShareId = item.shareId;
+
+      declineText.textContent =
+        `Фотография от @${item.senderUsername} исчезнет из твоего конвертика.`;
+
+      declineModal.classList.add('open');
+      declineModal.setAttribute('aria-hidden','false');
+
+      requestAnimationFrame(() => {
+        declineCancel.focus();
+      });
+    }
+
+    function closeDeclineModal(){
+      if(declineInProgress) return;
+
+      pendingDeclineShareId = '';
+      declineModal.classList.remove('open');
+      declineModal.setAttribute('aria-hidden','true');
+    }
+
+    async function confirmDeclineReceivedPhoto(){
+      if(!pendingDeclineShareId || !currentUser || declineInProgress) return;
+
+      const shareId = pendingDeclineShareId;
+
+      const itemIndex = receivedItems.findIndex(
+        item => String(item.shareId) === String(shareId)
+      );
+
+      if(itemIndex < 0){
+        closeDeclineModal();
+        return;
+      }
+
+      const item = receivedItems[itemIndex];
+      const card = inboxList.querySelector(
+        `[data-share-id="${CSS.escape(String(shareId))}"]`
+      );
+
+      declineInProgress = true;
+      declineConfirm.disabled = true;
+      declineCancel.disabled = true;
+      declineConfirm.textContent = 'Удаляем…';
+
+      try{
+        /*
+          Основной способ — обычный DELETE.
+          Для него decline_share_fix.sql добавляет безопасную RLS-политику:
+          пользователь может удалить только то, что прислали именно ему.
+        */
+        const { error:deleteError } = await sb
+          .from('photo_shares')
+          .delete()
+          .eq('id',shareId)
+          .eq('recipient_id',currentUser.id);
+
+        if(deleteError){
+          /*
+            Фолбэк для пользователей, которые раньше уже запускали
+            received_photos_update.sql с RPC decline_received_share.
+          */
+          const { error:rpcError } = await sb.rpc('decline_received_share', {
+            p_share_id:shareId
+          });
+
+          if(rpcError){
+            throw deleteError;
+          }
+        }
+
+        if(card){
+          card.classList.add('removing');
+        }
+
+        receivedItems.splice(itemIndex,1);
+        updateInboxBadge(receivedItems.length);
+
+        declineModal.classList.remove('open');
+        declineModal.setAttribute('aria-hidden','true');
+        pendingDeclineShareId = '';
+
+        setTimeout(() => {
+          renderReceivedShares();
+        },card ? 285 : 0);
+      }catch(error){
+        console.error('Не удалось отказаться от фотографии:',error);
+
+        alert(
+          'Не удалось отказаться от фотографии. ' +
+          'Запусти decline_share_fix.sql в Supabase и попробуй ещё раз.'
+        );
+      }finally{
+        declineInProgress = false;
+        declineConfirm.disabled = false;
+        declineCancel.disabled = false;
+        declineConfirm.textContent = 'Отказаться';
+      }
+    }
+
     function openInbox(){
       inboxDrawer.classList.add('open');
       inboxBackdrop.classList.add('open');
@@ -4984,20 +8048,27 @@
       if(!currentUser) return;
 
       setBusy(true);
-      revokeAllObjectUrls();
-      items = [];
+
+      // Сохраняем уже работающие ссылки на изображения.
+      // Поэтому после добавления новой фотографии старые не загружаются заново
+      // и не мигают.
+      const existingByPath = new Map(
+        items.map(item => [item.storagePath, item])
+      );
 
       try{
         const { data: rows, error } = await sb
           .from('photos')
-          .select('id,storage_path,tags,favorite,created_at')
+          .select('id,storage_path,tags,favorite,created_at,received_from_username')
           .order('created_at', { ascending:false });
 
         if(error) throw error;
 
         const loaded = await Promise.all((rows || []).map(async row => {
           try{
-            const src = await loadBlobUrl(row.storage_path);
+            const existing = existingByPath.get(row.storage_path);
+            const src = existing?.src || await loadBlobUrl(row.storage_path);
+
             return {
               id:row.id,
               storagePath:row.storage_path,
@@ -5005,6 +8076,7 @@
               favorite:Boolean(row.favorite),
               createdAt:new Date(row.created_at).getTime(),
               date:new Date(row.created_at).toLocaleString('ru-RU'),
+              receivedFromUsername:row.received_from_username || '',
               src,
               objectUrl:false
             };
@@ -5022,6 +8094,14 @@
       }finally{
         setBusy(false);
       }
+    }
+
+    function updateVisiblePhotoOwners(){
+      const username = currentUsername || 'вы';
+
+      grid.querySelectorAll('.photo-owner[data-own-photo="1"]').forEach(element => {
+        element.textContent = `Фото: @${username}`;
+      });
     }
 
     function updateTagFilter(){
@@ -5101,7 +8181,6 @@
           <div class="photo-wrap">
             <img class="photo" src="${item.src}" alt="Загруженная фотография">
             <div class="photo-badge">Фото ${items.length - items.indexOf(item)}</div>
-
             <button
               class="favorite-btn ${item.favorite ? 'active' : ''}"
               type="button"
@@ -5113,7 +8192,19 @@
           </div>
 
           <div class="card-body">
-            <label class="label tags-label">Теги</label>
+            <div class="tags-head">
+              <label class="label tags-label">Теги</label>
+              <span
+                class="photo-owner"
+                data-own-photo="${item.receivedFromUsername ? '0' : '1'}"
+              >
+                Фото: @${escapeHtml(
+                  item.receivedFromUsername ||
+                  currentUsername ||
+                  'вы'
+                )}
+              </span>
+            </div>
             <input class="tags-input" type="text" placeholder="Например: учёба, идеи, документы">
             <div class="tag-list">
               ${tags.map(tag => `<span class="tag-chip">${escapeHtml(tag)}</span>`).join('')}
@@ -5263,7 +8354,20 @@
           }
 
           item.tags = tagsValue;
-          render();
+
+          const tagList = card.querySelector('.tag-list');
+          if(tagList){
+            tagList.innerHTML = parseTags(tagsValue)
+              .map(tag => `<span class="tag-chip">${escapeHtml(tag)}</span>`)
+              .join('');
+          }
+
+          updateTagFilter();
+
+          // Полная перерисовка нужна только если включён фильтр/поиск.
+          if(search.value.trim() || tagFilter.value){
+            render();
+          }
         };
 
         card.querySelector('.delete').onclick = async () => {
@@ -5489,7 +8593,47 @@
     });
 
 
-    inboxButton.addEventListener('click', openInbox);
+    friendsButton.addEventListener('click', openFriends);
+    friendsClose.addEventListener('click', closeFriends);
+    friendsBackdrop.addEventListener('click', closeFriends);
+
+    friendAddButton.addEventListener('click', addFriend);
+    friendUsernameInput.addEventListener('keydown', e => {
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        addFriend();
+      }
+    });
+
+    friendsList.addEventListener('click', e => {
+      const button = e.target.closest('[data-remove-friend]');
+      if(!button) return;
+      removeFriend(button.dataset.removeFriend);
+    });
+
+    incomingRequestsList.addEventListener('click', e => {
+      const acceptButton = e.target.closest('[data-accept-request]');
+      if(acceptButton){
+        respondToFriendRequest(acceptButton.dataset.acceptRequest,true);
+        return;
+      }
+
+      const declineButton = e.target.closest('[data-decline-request]');
+      if(declineButton){
+        respondToFriendRequest(declineButton.dataset.declineRequest,false);
+      }
+    });
+
+    outgoingRequestsList.addEventListener('click', e => {
+      const cancelButton = e.target.closest('[data-cancel-request]');
+      if(!cancelButton) return;
+      cancelFriendRequest(cancelButton.dataset.cancelRequest);
+    });
+
+    inboxButton.addEventListener('click', () => {
+      closeFriends();
+      openInbox();
+    });
     inboxClose.addEventListener('click', closeInbox);
     inboxBackdrop.addEventListener('click', closeInbox);
 
@@ -5505,6 +8649,29 @@
       const saveButton = e.target.closest('[data-save-received]');
       if(saveButton){
         saveReceivedPhoto(Number(saveButton.dataset.saveReceived));
+        return;
+      }
+
+      const declineButton = e.target.closest('[data-decline-received]');
+      if(declineButton){
+        e.preventDefault();
+        e.stopPropagation();
+        openDeclineModal(Number(declineButton.dataset.declineReceived));
+      }
+    });
+
+    declineCancel.addEventListener('click', closeDeclineModal);
+    declineConfirm.addEventListener('click', confirmDeclineReceivedPhoto);
+
+    declineModal.addEventListener('click', e => {
+      if(e.target === declineModal){
+        closeDeclineModal();
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && declineModal.classList.contains('open')){
+        closeDeclineModal();
       }
     });
 
@@ -5528,31 +8695,103 @@
       }
     });
 
-    clearAll.addEventListener('click', async () => {
-      if(!items.length || busy) return;
-      if(!confirm('Удалить все фотографии, теги и избранное из облака?')) return;
+    let deleteAllInProgress = false;
 
-      setBusy(true);
+    function openDeleteAllModal(){
+      if(!currentUser) return;
+
+      if(!items.length){
+        alert('В коллекции пока нет фотографий.');
+        return;
+      }
+
+      deleteAllModal.classList.add('open');
+      deleteAllModal.setAttribute('aria-hidden','false');
+
+      requestAnimationFrame(() => {
+        deleteAllCancel.focus();
+      });
+    }
+
+    function closeDeleteAllModal(){
+      if(deleteAllInProgress) return;
+
+      deleteAllModal.classList.remove('open');
+      deleteAllModal.setAttribute('aria-hidden','true');
+    }
+
+    async function deleteAllPhotos(){
+      if(!currentUser || deleteAllInProgress) return;
+
+      deleteAllInProgress = true;
+      deleteAllConfirm.disabled = true;
+      deleteAllCancel.disabled = true;
+      deleteAllConfirm.textContent = 'Удаляем…';
 
       try{
-        const paths = items.map(x => x.storagePath);
+        // Берём актуальный список прямо из Supabase.
+        const { data:rows, error:loadError } = await sb
+          .from('photos')
+          .select('storage_path')
+          .eq('user_id',currentUser.id);
 
-        const { error:deleteError } = await sb.from('photos').delete().eq('user_id', currentUser.id);
+        if(loadError) throw loadError;
+
+        const paths = (rows || [])
+          .map(row => row.storage_path)
+          .filter(Boolean);
+
+        const { error:deleteError } = await sb
+          .from('photos')
+          .delete()
+          .eq('user_id',currentUser.id);
+
         if(deleteError) throw deleteError;
 
         if(paths.length){
-          const { error:storageError } = await sb.storage.from(CLOUD_BUCKET).remove(paths);
-          if(storageError) console.warn(storageError);
+          const { error:storageError } = await sb.storage
+            .from(CLOUD_BUCKET)
+            .remove(paths);
+
+          if(storageError){
+            console.warn('Ошибка удаления файлов из Storage:', storageError);
+          }
         }
 
-        revokeAllObjectUrls();
         items = [];
         render();
+
+        deleteAllModal.classList.remove('open');
+        deleteAllModal.setAttribute('aria-hidden','true');
       }catch(error){
         console.error(error);
-        alert('Не удалось удалить всю коллекцию.');
+        alert('Не удалось удалить всю коллекцию. Попробуй ещё раз.');
       }finally{
-        setBusy(false);
+        deleteAllInProgress = false;
+        deleteAllConfirm.disabled = false;
+        deleteAllCancel.disabled = false;
+        deleteAllConfirm.textContent = 'Удалить всё';
+      }
+    }
+
+    clearAll.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      openDeleteAllModal();
+    });
+
+    deleteAllCancel.addEventListener('click', closeDeleteAllModal);
+    deleteAllConfirm.addEventListener('click', deleteAllPhotos);
+
+    deleteAllModal.addEventListener('click', e => {
+      if(e.target === deleteAllModal){
+        closeDeleteAllModal();
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && deleteAllModal.classList.contains('open')){
+        closeDeleteAllModal();
       }
     });
 
@@ -5702,9 +8941,11 @@
 
         if(error) throw error;
 
+        currentUsername = data.username;
         profileUsername.value = data.username;
         profileAccountName.textContent = data.username;
         profileAvatar.textContent = data.username[0].toUpperCase();
+        updateVisiblePhotoOwners();
         setUsernameMessage('Юзернейм сохранён. Теперь по нему можно входить.', 'success');
       }catch(error){
         console.error(error);
@@ -5735,6 +8976,11 @@
 
       if(inboxDrawer.classList.contains('open')){
         closeInbox();
+        return;
+      }
+
+      if(friendsDrawer.classList.contains('open')){
+        closeFriends();
         return;
       }
 
@@ -5815,13 +9061,20 @@
         }
 
         closeInbox();
+        closeFriends();
         closeShareDialog();
         updateInboxBadge(0);
         receivedItems = [];
+        friendItems = [];
+        incomingFriendRequests = [];
+        outgoingFriendRequests = [];
+        renderFriends();
+        renderFriendRequests();
 
         revokeAllObjectUrls();
         items = [];
         render();
+        currentUsername = '';
         profileEmail.textContent = '—';
         profileAccountName.textContent = '...';
         profileUsername.value = '';
@@ -5839,6 +9092,10 @@
         await migrateLocalPhotosOnce();
         await loadPhotos();
         await refreshInboxCount();
+        await Promise.all([
+          loadFriends(),
+          loadFriendRequests({ silent:true })
+        ]);
 
         if(inboxPollTimer){
           clearInterval(inboxPollTimer);
@@ -5846,6 +9103,7 @@
 
         inboxPollTimer = setInterval(() => {
           refreshInboxCount();
+          loadFriendRequests({ silent:true });
         }, 20000);
       }
     }
@@ -5891,6 +9149,49 @@
 
     init();
   </script>
+
+
+<script>
+  (() => {
+    const navHome = document.getElementById('navHome');
+    const navPhotos = document.getElementById('navPhotos');
+    const navFavorites = document.getElementById('navFavorites');
+    const receivedShortcut = document.getElementById('receivedShortcut');
+    const inboxButton = document.getElementById('inboxButton');
+    const galleryGrid = document.getElementById('grid');
+    const favOnly = document.getElementById('favOnly');
+
+    const navButtons = [navHome,navPhotos,navFavorites].filter(Boolean);
+
+    function activate(button){
+      navButtons.forEach(item => item.classList.toggle('active',item === button));
+    }
+
+    navHome?.addEventListener('click',() => {
+      activate(navHome);
+      window.scrollTo({ top:0, behavior:'smooth' });
+    });
+
+    navPhotos?.addEventListener('click',() => {
+      activate(navPhotos);
+      galleryGrid?.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+
+    navFavorites?.addEventListener('click',() => {
+      activate(navFavorites);
+
+      if(favOnly && !favOnly.classList.contains('active')){
+        favOnly.click();
+      }
+
+      galleryGrid?.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+
+    receivedShortcut?.addEventListener('click',() => {
+      inboxButton?.click();
+    });
+  })();
+</script>
 
 </body>
 </html>
