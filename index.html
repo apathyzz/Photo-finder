@@ -3682,6 +3682,39 @@
   }
 </style>
 
+
+<style>
+  /* Три кнопки карточки теперь ровно помещаются в одну строку */
+  .card .actions{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:7px !important;
+    width:100%;
+  }
+
+  .card .actions button{
+    min-width:0 !important;
+    width:100% !important;
+    padding:10px 5px !important;
+    font-size:13px !important;
+    line-height:1.15 !important;
+    white-space:nowrap !important;
+    overflow:hidden;
+    text-overflow:clip;
+  }
+
+  @media(max-width:420px){
+    .card .actions{
+      gap:6px !important;
+    }
+
+    .card .actions button{
+      padding:9px 3px !important;
+      font-size:12px !important;
+    }
+  }
+</style>
+
 </head>
 <body>
 
