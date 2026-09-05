@@ -2329,6 +2329,800 @@
   }
 </style>
 
+
+<style>
+  /* ===== Профиль слева ===== */
+  :root{
+    --profile-theme:#2563eb;
+    --profile-theme-2:#60a5fa;
+    --profile-theme-soft:#eaf2ff;
+    --profile-theme-border:#bfdbfe;
+    --profile-theme-text:#1d4ed8;
+    --profile-theme-shadow:rgba(37,99,235,.16);
+  }
+
+  body[data-theme="blue"]{
+    --profile-theme:#2563eb;
+    --profile-theme-2:#60a5fa;
+    --profile-theme-soft:#eaf2ff;
+    --profile-theme-border:#bfdbfe;
+    --profile-theme-text:#1d4ed8;
+    --profile-theme-shadow:rgba(37,99,235,.16);
+  }
+
+  body[data-theme="violet"]{
+    --profile-theme:#7c3aed;
+    --profile-theme-2:#a78bfa;
+    --profile-theme-soft:#f2ecff;
+    --profile-theme-border:#d8c7ff;
+    --profile-theme-text:#6d28d9;
+    --profile-theme-shadow:rgba(124,58,237,.16);
+  }
+
+  body[data-theme="emerald"]{
+    --profile-theme:#059669;
+    --profile-theme-2:#34d399;
+    --profile-theme-soft:#e7f8f1;
+    --profile-theme-border:#a7ead3;
+    --profile-theme-text:#047857;
+    --profile-theme-shadow:rgba(5,150,105,.16);
+  }
+
+  body[data-theme="rose"]{
+    --profile-theme:#e11d48;
+    --profile-theme-2:#fb7185;
+    --profile-theme-soft:#fff0f3;
+    --profile-theme-border:#fecdd6;
+    --profile-theme-text:#be123c;
+    --profile-theme-shadow:rgba(225,29,72,.15);
+  }
+
+  body[data-theme="orange"]{
+    --profile-theme:#ea580c;
+    --profile-theme-2:#fb923c;
+    --profile-theme-soft:#fff3e8;
+    --profile-theme-border:#fed7aa;
+    --profile-theme-text:#c2410c;
+    --profile-theme-shadow:rgba(234,88,12,.15);
+  }
+
+  /* Перекрашиваем основные акценты сайта */
+  body{
+    --accent:var(--profile-theme) !important;
+    --accent-2:var(--profile-theme-2) !important;
+  }
+
+  .hero-badge,
+  .eyebrow{
+    color:var(--profile-theme-text) !important;
+    border-color:var(--profile-theme-border) !important;
+    box-shadow:0 12px 30px var(--profile-theme-shadow) !important;
+  }
+
+  .layer-back{
+    background:color-mix(in srgb, var(--profile-theme-2) 22%, transparent) !important;
+    border-color:color-mix(in srgb, var(--profile-theme) 42%, transparent) !important;
+  }
+
+  .layer-front{
+    background:linear-gradient(135deg,var(--profile-theme),var(--profile-theme-2)) !important;
+    box-shadow:0 5px 14px var(--profile-theme-shadow) !important;
+  }
+
+  .logo-spark{
+    background:var(--profile-theme-2) !important;
+  }
+
+  .drop:hover{
+    border-color:var(--profile-theme-2) !important;
+  }
+
+  .upload-icon,
+  #dropZone .camera-icon{
+    --lens-dark:var(--profile-theme) !important;
+    --lens-light:var(--profile-theme-soft) !important;
+    background:var(--profile-theme) !important;
+    box-shadow:0 14px 28px var(--profile-theme-shadow) !important;
+  }
+
+  .fav-filter.active,
+  .save,
+  .profile-primary{
+    background:var(--profile-theme) !important;
+    color:#fff !important;
+    border-color:var(--profile-theme) !important;
+  }
+
+  .tag-chip{
+    background:var(--profile-theme-soft) !important;
+    color:var(--profile-theme-text) !important;
+  }
+
+  .favorite-btn.active{
+    color:var(--profile-theme) !important;
+  }
+
+  .search:focus,
+  .control-select:focus,
+  .tags-input:focus,
+  .profile-input:focus{
+    border-color:var(--profile-theme-2) !important;
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--profile-theme) 12%, transparent) !important;
+  }
+
+  .counter,
+  .favorite-counter{
+    border-color:var(--profile-theme-border) !important;
+    box-shadow:0 12px 28px var(--profile-theme-shadow) !important;
+  }
+
+  .auth-brand{
+    background:var(--profile-theme-soft) !important;
+    color:var(--profile-theme-text) !important;
+  }
+
+  .auth-primary{
+    background:var(--profile-theme) !important;
+    border-color:var(--profile-theme) !important;
+  }
+
+  /* Старый блок аккаунта в шапке больше не нужен */
+  .account-pill{
+    display:none !important;
+  }
+
+  .profile-trigger{
+    position:fixed;
+    z-index:9500;
+    left:12px;
+    top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    align-items:center;
+    gap:9px;
+    height:50px;
+    max-width:50px;
+    padding:0 13px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.82);
+    border-radius:0 15px 15px 0;
+    background:rgba(255,255,255,.92);
+    color:#344054;
+    box-shadow:0 12px 34px rgba(15,23,42,.14);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    cursor:pointer;
+    transition:max-width .35s cubic-bezier(.16,1,.3,1), transform .25s ease, box-shadow .25s ease;
+  }
+
+  .profile-trigger[hidden]{
+    display:none !important;
+  }
+
+  .profile-trigger:hover{
+    max-width:132px;
+    transform:translateY(-50%) translateX(2px);
+    box-shadow:0 16px 40px var(--profile-theme-shadow);
+  }
+
+  .profile-trigger-icon{
+    position:relative;
+    flex:0 0 23px;
+    width:23px;
+    height:23px;
+    display:grid;
+    place-items:center;
+    color:transparent;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--profile-theme),var(--profile-theme-2));
+  }
+
+  .profile-trigger-icon::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-5px;
+    width:27px;
+    height:13px;
+    transform:translateX(-50%);
+    border-radius:15px 15px 8px 8px;
+    background:var(--profile-theme-soft);
+    border:2px solid var(--profile-theme);
+  }
+
+  .profile-trigger-text{
+    white-space:nowrap;
+    font-size:13px;
+    font-weight:800;
+  }
+
+  .profile-backdrop{
+    position:fixed;
+    inset:0;
+    z-index:9997;
+    background:rgba(15,23,42,.26);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s ease;
+    backdrop-filter:blur(2px);
+    -webkit-backdrop-filter:blur(2px);
+  }
+
+  .profile-backdrop.open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .profile-drawer{
+    position:fixed;
+    z-index:9998;
+    left:0;
+    top:0;
+    bottom:0;
+    width:min(390px,calc(100vw - 28px));
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+    overflow-y:auto;
+    background:rgba(255,255,255,.97);
+    border-right:1px solid #d9e1ec;
+    box-shadow:24px 0 70px rgba(15,23,42,.18);
+    transform:translateX(-104%);
+    transition:transform .42s cubic-bezier(.16,1,.3,1);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+
+  .profile-drawer.open{
+    transform:translateX(0);
+  }
+
+  .profile-drawer-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
+    padding-bottom:18px;
+    border-bottom:1px solid #edf0f5;
+  }
+
+  .profile-kicker{
+    margin-bottom:3px;
+    color:var(--profile-theme-text);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+
+  .profile-drawer h2{
+    margin:0;
+    color:#172033;
+    font-size:28px;
+    letter-spacing:-.035em;
+  }
+
+  .profile-close{
+    width:38px;
+    height:38px;
+    border:1px solid #e0e5ed;
+    border-radius:11px;
+    background:#fff;
+    color:#526072;
+    font-size:25px;
+    line-height:1;
+    cursor:pointer;
+  }
+
+  .profile-user{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    margin-top:18px;
+    padding:14px;
+    border:1px solid var(--profile-theme-border);
+    border-radius:15px;
+    background:linear-gradient(135deg,#fff,var(--profile-theme-soft));
+  }
+
+  .profile-avatar{
+    width:48px;
+    height:48px;
+    flex:0 0 48px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--profile-theme),var(--profile-theme-2));
+    color:#fff;
+    font-size:19px;
+    font-weight:900;
+    box-shadow:0 10px 24px var(--profile-theme-shadow);
+  }
+
+  .profile-user-copy{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+  }
+
+  .profile-user-copy strong{
+    color:#273246;
+    font-size:14px;
+  }
+
+  .profile-user-copy span{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:#667085;
+    font-size:13px;
+  }
+
+  .profile-section{
+    margin-top:18px;
+    padding:16px;
+    border:1px solid #e3e8f0;
+    border-radius:15px;
+    background:rgba(250,251,253,.88);
+  }
+
+  .profile-section-title{
+    margin-bottom:12px;
+    color:#293348;
+    font-size:14px;
+    font-weight:900;
+  }
+
+  .theme-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+
+  .theme-option{
+    height:43px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:0 11px;
+    border:1px solid #dce2eb;
+    border-radius:10px;
+    background:#fff;
+    color:#4b5568;
+    font:inherit;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+    transition:border-color .2s ease, transform .2s ease, background .2s ease;
+  }
+
+  .theme-option:hover{
+    transform:translateY(-1px);
+    border-color:#c4ccd8;
+  }
+
+  .theme-option.active{
+    border-color:var(--profile-theme);
+    background:var(--profile-theme-soft);
+    color:var(--profile-theme-text);
+    box-shadow:0 0 0 2px color-mix(in srgb, var(--profile-theme) 10%, transparent);
+  }
+
+  .theme-dot{
+    width:17px;
+    height:17px;
+    flex:0 0 17px;
+    border-radius:50%;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.65), 0 0 0 1px rgba(15,23,42,.08);
+  }
+
+  .theme-blue{background:#2563eb}
+  .theme-violet{background:#7c3aed}
+  .theme-emerald{background:#059669}
+  .theme-rose{background:#e11d48}
+  .theme-orange{background:#ea580c}
+
+  .profile-hint{
+    margin-top:10px;
+    color:#8892a3;
+    font-size:11px;
+    line-height:1.45;
+  }
+
+  .profile-label{
+    display:block;
+    margin:10px 0 6px;
+    color:#4b5568;
+    font-size:12px;
+    font-weight:800;
+  }
+
+  .profile-input{
+    width:100%;
+    height:44px;
+    border:1px solid #d6dde7;
+    border-radius:10px;
+    padding:0 11px;
+    background:#fff;
+    color:#273246;
+    font:inherit;
+    outline:none;
+  }
+
+  .profile-primary{
+    width:100%;
+    height:44px;
+    margin-top:12px;
+    border:1px solid var(--profile-theme);
+    border-radius:10px;
+    font:inherit;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  .profile-message{
+    min-height:18px;
+    margin-top:9px;
+    color:#667085;
+    font-size:12px;
+    line-height:1.4;
+  }
+
+  .profile-message.success{color:#15803d}
+  .profile-message.error{color:#b42318}
+
+  .profile-spacer{
+    flex:1 1 auto;
+    min-height:22px;
+  }
+
+  .profile-logout{
+    width:100%;
+    min-height:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    border:1px solid #fecaca;
+    border-radius:11px;
+    background:#fff3f3;
+    color:#c62828;
+    font:inherit;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  body.profile-open{
+    overflow:hidden;
+  }
+
+  @media(max-width:720px){
+    .profile-trigger{
+      left:7px;
+      top:auto;
+      bottom:20px;
+      transform:none;
+      border-radius:14px;
+      max-width:50px;
+    }
+
+    .profile-trigger:hover{
+      transform:translateY(-2px);
+    }
+
+    .profile-drawer{
+      width:min(370px,calc(100vw - 14px));
+      padding:16px;
+    }
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    .profile-trigger,
+    .profile-backdrop,
+    .profile-drawer{
+      transition:none !important;
+    }
+  }
+</style>
+
+
+<style>
+  /* Профиль теперь открывается по нажатию на логотип Photo Finder */
+  .profile-logo-button{
+    appearance:none;
+    -webkit-appearance:none;
+    font-family:inherit;
+    cursor:pointer;
+    text-align:left;
+    outline:none;
+    transition:
+      transform .26s cubic-bezier(.16,1,.3,1),
+      box-shadow .26s ease,
+      border-color .26s ease !important;
+  }
+
+  .profile-logo-button:hover{
+    transform:translateY(-2px) scale(1.015);
+    border-color:var(--profile-theme-border) !important;
+    box-shadow:0 16px 34px var(--profile-theme-shadow) !important;
+  }
+
+  .profile-logo-button:active{
+    transform:translateY(0) scale(.99);
+  }
+
+  .profile-logo-button:focus-visible{
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--profile-theme) 18%, transparent),
+      0 14px 32px var(--profile-theme-shadow) !important;
+  }
+</style>
+
+
+<style>
+  /* Плавное открытие и закрытие профиля без изменения логики кнопок */
+  .profile-backdrop{
+    opacity:0 !important;
+    transition:opacity .38s ease !important;
+  }
+
+  .profile-backdrop.open{
+    opacity:1 !important;
+  }
+
+  .profile-drawer{
+    transform:translateX(-104%) !important;
+    opacity:.96;
+    will-change:transform, opacity;
+    transition:
+      transform .52s cubic-bezier(.22,1,.36,1),
+      opacity .34s ease !important;
+  }
+
+  .profile-drawer.open{
+    transform:translateX(0) !important;
+    opacity:1;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .profile-backdrop,
+    .profile-drawer{
+      transition:none !important;
+    }
+  }
+</style>
+
+
+<style>
+  /* Более плавное и стабильное закрытие профиля */
+  .profile-drawer{
+    opacity:1 !important;
+    transform:translate3d(-104%,0,0) !important;
+    transition:
+      transform .62s cubic-bezier(.22,.61,.36,1) !important;
+    will-change:transform;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    contain:paint;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:rgba(255,255,255,.985) !important;
+  }
+
+  .profile-drawer.open{
+    transform:translate3d(0,0,0) !important;
+  }
+
+  .profile-backdrop{
+    transition:opacity .5s cubic-bezier(.22,.61,.36,1) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .profile-drawer,
+    .profile-backdrop{
+      transition:none !important;
+    }
+  }
+</style>
+
+
+<style>
+  /* Убираем «мыльность» профиля: делаем панель и элементы более чёткими */
+  .profile-backdrop{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:rgba(15,23,42,.28) !important;
+  }
+
+  .profile-drawer{
+    background:#ffffff !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    border-right:1px solid #cfd7e3 !important;
+    box-shadow:18px 0 42px rgba(15,23,42,.14) !important;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  .profile-user{
+    background:#ffffff !important;
+    border-color:#d5dce7 !important;
+    box-shadow:none !important;
+  }
+
+  .profile-section{
+    background:#ffffff !important;
+    border-color:#d8dee8 !important;
+    box-shadow:none !important;
+  }
+
+  .theme-option,
+  .profile-input,
+  .profile-close{
+    background:#ffffff !important;
+    border-color:#cfd7e3 !important;
+    box-shadow:none !important;
+  }
+
+  .theme-option.active{
+    background:var(--profile-theme-soft) !important;
+    border-color:var(--profile-theme) !important;
+    box-shadow:0 0 0 1px var(--profile-theme) !important;
+  }
+
+  .profile-primary{
+    box-shadow:none !important;
+  }
+
+  .profile-logout{
+    background:#fff7f7 !important;
+    box-shadow:none !important;
+  }
+
+  .profile-user-copy strong,
+  .profile-section-title,
+  .profile-label,
+  .profile-drawer h2{
+    text-shadow:none !important;
+  }
+</style>
+
+
+<style>
+  /* Максимально чёткий профиль: без GPU-размытия текста */
+  .profile-drawer{
+    left:-420px !important;
+    transform:none !important;
+    opacity:1 !important;
+    will-change:left !important;
+    contain:none !important;
+    backface-visibility:visible !important;
+    -webkit-backface-visibility:visible !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:#fff !important;
+    border-right:1px solid #c6cfdb !important;
+    box-shadow:14px 0 28px rgba(15,23,42,.12) !important;
+    transition:left .5s cubic-bezier(.22,.61,.36,1) !important;
+    -webkit-font-smoothing:auto !important;
+    text-rendering:auto !important;
+  }
+
+  .profile-drawer.open{
+    left:0 !important;
+    transform:none !important;
+  }
+
+  .profile-backdrop{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:rgba(15,23,42,.28) !important;
+    transition:opacity .42s ease !important;
+  }
+
+  .profile-drawer-head{
+    border-bottom-color:#d9e0e9 !important;
+  }
+
+  .profile-user,
+  .profile-section{
+    background:#fff !important;
+    border-color:#cfd7e2 !important;
+    box-shadow:none !important;
+  }
+
+  .theme-option,
+  .profile-input,
+  .profile-close{
+    background:#fff !important;
+    border-color:#c7d0dc !important;
+    box-shadow:none !important;
+  }
+
+  .theme-option{
+    color:#394457 !important;
+    font-weight:800 !important;
+  }
+
+  .theme-option.active{
+    background:var(--profile-theme-soft) !important;
+    color:var(--profile-theme-text) !important;
+    border-color:var(--profile-theme) !important;
+    box-shadow:inset 0 0 0 1px var(--profile-theme) !important;
+  }
+
+  .profile-input{
+    color:#253047 !important;
+  }
+
+  .profile-section-title,
+  .profile-label,
+  .profile-user-copy strong,
+  .profile-drawer h2{
+    color:#1d273b !important;
+    text-shadow:none !important;
+  }
+
+  .profile-hint,
+  .profile-user-copy span{
+    color:#687386 !important;
+  }
+
+  .profile-primary{
+    box-shadow:none !important;
+  }
+
+  .profile-logout{
+    background:#fff7f7 !important;
+    box-shadow:none !important;
+  }
+
+  @media(max-width:720px){
+    .profile-drawer{
+      left:-420px !important;
+    }
+
+    .profile-drawer.open{
+      left:0 !important;
+    }
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    .profile-drawer,
+    .profile-backdrop{
+      transition:none !important;
+    }
+  }
+</style>
+
+
+<style>
+  .auth-field-hint{
+    margin:6px 2px 2px;
+    color:#8a94a6;
+    font-size:11px;
+    line-height:1.35;
+  }
+
+  .signup-username-row{
+    margin-top:2px;
+  }
+
+  .username-save-btn{
+    margin-top:10px !important;
+  }
+
+  #profileAccountName{
+    overflow:hidden;
+    max-width:230px;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+</style>
+
 </head>
 <body>
 
@@ -2338,8 +3132,14 @@
       <h2>Облачная фотоколлекция</h2>
       <p class="auth-copy">Войди, чтобы фотографии не пропадали после очистки данных браузера и были доступны на других устройствах.</p>
 
-      <label class="auth-label" for="authEmail">Email</label>
-      <input class="auth-input" id="authEmail" type="email" autocomplete="email" placeholder="you@example.com">
+      <label class="auth-label" for="authEmail">Email или юзернейм</label>
+      <input class="auth-input" id="authEmail" type="text" autocomplete="username" placeholder="you@example.com или username">
+
+      <div class="signup-username-row">
+        <label class="auth-label" for="authUsername">Юзернейм для регистрации</label>
+        <input class="auth-input" id="authUsername" type="text" autocomplete="username" maxlength="24" placeholder="Например: denis35">
+        <div class="auth-field-hint">3–24 символа: латинские буквы, цифры, точка или _</div>
+      </div>
 
       <label class="auth-label" for="authPassword">Пароль</label>
       <input class="auth-input" id="authPassword" type="password" autocomplete="current-password" placeholder="Минимум 6 символов">
@@ -2355,17 +3155,94 @@
       </div>
     </div>
   </div>
+
+  <div class="profile-backdrop" id="profileBackdrop"></div>
+
+  <aside class="profile-drawer" id="profileDrawer" aria-hidden="true">
+    <div class="profile-drawer-head">
+      <div>
+        <div class="profile-kicker">Photo Finder</div>
+        <h2>Профиль</h2>
+      </div>
+      <button class="profile-close" id="profileClose" type="button" aria-label="Закрыть профиль">×</button>
+    </div>
+
+    <div class="profile-user">
+      <div class="profile-avatar" id="profileAvatar">P</div>
+      <div class="profile-user-copy">
+        <strong id="profileAccountName">...</strong>
+        <span id="profileEmail">—</span>
+      </div>
+    </div>
+
+    <section class="profile-section">
+      <div class="profile-section-title">Юзернейм</div>
+      <label class="profile-label" for="profileUsername">Имя пользователя</label>
+      <input class="profile-input" id="profileUsername" type="text" maxlength="24" autocomplete="username" placeholder="Например: denis35">
+      <button class="profile-primary username-save-btn" id="saveUsernameBtn" type="button">Сохранить юзернейм</button>
+      <div class="profile-hint">По нему можно входить вместо email. 3–24 символа: A–Z, 0–9, точка или _</div>
+      <div class="profile-message" id="usernameMessage"></div>
+    </section>
+
+    <section class="profile-section">
+      <div class="profile-section-title">Цвет темы</div>
+      <div class="theme-grid" id="themeGrid">
+        <button class="theme-option" type="button" data-theme-choice="blue" aria-label="Синяя тема">
+          <span class="theme-dot theme-blue"></span>
+          <span>Синяя</span>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="violet" aria-label="Фиолетовая тема">
+          <span class="theme-dot theme-violet"></span>
+          <span>Фиолетовая</span>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="emerald" aria-label="Зелёная тема">
+          <span class="theme-dot theme-emerald"></span>
+          <span>Зелёная</span>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="rose" aria-label="Розовая тема">
+          <span class="theme-dot theme-rose"></span>
+          <span>Розовая</span>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="orange" aria-label="Оранжевая тема">
+          <span class="theme-dot theme-orange"></span>
+          <span>Оранжевая</span>
+        </button>
+      </div>
+      <div class="profile-hint">Тема сохраняется в аккаунте и применяется после следующего входа.</div>
+    </section>
+
+    <section class="profile-section">
+      <div class="profile-section-title">Смена пароля</div>
+
+      <label class="profile-label" for="newPassword">Новый пароль</label>
+      <input class="profile-input" id="newPassword" type="password" autocomplete="new-password" placeholder="Минимум 6 символов">
+
+      <label class="profile-label" for="confirmPassword">Повтори пароль</label>
+      <input class="profile-input" id="confirmPassword" type="password" autocomplete="new-password" placeholder="Повтори новый пароль">
+
+      <button class="profile-primary" id="changePasswordBtn" type="button">Сменить пароль</button>
+      <div class="profile-message" id="profileMessage"></div>
+    </section>
+
+    <div class="profile-spacer"></div>
+
+    <button class="profile-logout" id="profileLogoutBtn" type="button">
+      <span aria-hidden="true">↪</span>
+      Выйти из аккаунта
+    </button>
+  </aside>
+
   <main class="wrap">
     <header class="hero">
       <div>
-        <div class="eyebrow logo-badge hero-badge">
+        <button class="eyebrow logo-badge hero-badge profile-logo-button" id="profileLogoButton" type="button" aria-label="Открыть профиль" title="Открыть профиль">
   <span class="logo-mark" aria-hidden="true">
     <span class="logo-layer layer-back"></span>
     <span class="logo-layer layer-front"></span>
     <span class="logo-spark"></span>
   </span>
   <span class="logo-text">Photo Finder</span>
-</div>
+</button>
         <p class="sub">Загружай фотографии, добавляй теги и избранное. Коллекция хранится в облаке и доступна после входа.</p>
       </div>
       <div class="hero-counters">
@@ -2474,6 +3351,7 @@
 
     const authScreen = document.getElementById('authScreen');
     const authEmail = document.getElementById('authEmail');
+    const authUsername = document.getElementById('authUsername');
     const authPassword = document.getElementById('authPassword');
     const authMessage = document.getElementById('authMessage');
     const authSetup = document.getElementById('authSetup');
@@ -2482,6 +3360,23 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const accountPill = document.getElementById('accountPill');
     const accountEmail = document.getElementById('accountEmail');
+
+    const profileLogoButton = document.getElementById('profileLogoButton');
+    const profileDrawer = document.getElementById('profileDrawer');
+    const profileBackdrop = document.getElementById('profileBackdrop');
+    const profileClose = document.getElementById('profileClose');
+    const profileEmail = document.getElementById('profileEmail');
+    const profileAccountName = document.getElementById('profileAccountName');
+    const profileAvatar = document.getElementById('profileAvatar');
+    const profileUsername = document.getElementById('profileUsername');
+    const saveUsernameBtn = document.getElementById('saveUsernameBtn');
+    const usernameMessage = document.getElementById('usernameMessage');
+    const themeGrid = document.getElementById('themeGrid');
+    const newPassword = document.getElementById('newPassword');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const changePasswordBtn = document.getElementById('changePasswordBtn');
+    const profileMessage = document.getElementById('profileMessage');
+    const profileLogoutBtn = document.getElementById('profileLogoutBtn');
 
     const CLOUD_BUCKET = 'photos';
     const LOCAL_META_KEY = 'photoNotesMetaV2';
@@ -2519,15 +3414,173 @@
       authMessage.className = 'auth-message' + (type ? ` ${type}` : '');
     }
 
+
+    function normalizeUsername(value){
+      return String(value || '').trim();
+    }
+
+    function isValidUsername(value){
+      return /^[A-Za-z0-9_.]{3,24}$/.test(normalizeUsername(value));
+    }
+
+    function setUsernameMessage(message = '', type = ''){
+      usernameMessage.textContent = message;
+      usernameMessage.className = 'profile-message' + (type ? ` ${type}` : '');
+    }
+
+    function friendlyAuthError(error){
+      const text = String(error?.message || error || '').toLowerCase();
+
+      if(text.includes('email rate limit exceeded')){
+        return 'Слишком много писем отправлено. Попробуй позже.';
+      }
+
+      if(text.includes('invalid login credentials')){
+        return 'Неверный логин или пароль.';
+      }
+
+      if(text.includes('database error saving new user') || text.includes('username_taken')){
+        return 'Не удалось создать аккаунт. Возможно, этот юзернейм уже занят.';
+      }
+
+      return error?.message || 'Произошла ошибка авторизации.';
+    }
+
+
+    const ALLOWED_THEMES = ['blue','violet','emerald','rose','orange'];
+
+    function setProfileMessage(message = '', type = ''){
+      profileMessage.textContent = message;
+      profileMessage.className = 'profile-message' + (type ? ` ${type}` : '');
+    }
+
+    function normalizeTheme(theme){
+      return ALLOWED_THEMES.includes(theme) ? theme : 'blue';
+    }
+
+    function updateThemeButtons(theme){
+      document.querySelectorAll('[data-theme-choice]').forEach(button => {
+        const active = button.dataset.themeChoice === theme;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+    }
+
+    function applyTheme(theme){
+      const normalized = normalizeTheme(theme);
+      document.body.dataset.theme = normalized;
+      updateThemeButtons(normalized);
+      localStorage.setItem('photoFinderTheme', normalized);
+      return normalized;
+    }
+
+    async function saveTheme(theme){
+      const normalized = applyTheme(theme);
+
+      if(!sb || !currentUser) return;
+
+      const oldMetadata = currentUser.user_metadata || {};
+      const { data, error } = await sb.auth.updateUser({
+        data:{
+          ...oldMetadata,
+          theme:normalized
+        }
+      });
+
+      if(error){
+        setProfileMessage('Тема применена, но не удалось сохранить её в аккаунте.', 'error');
+        return;
+      }
+
+      if(data?.user){
+        currentUser = data.user;
+      }
+
+      setProfileMessage('Цвет темы сохранён.', 'success');
+    }
+
+    function openProfile(){
+      if(!currentUser) return;
+      profileDrawer.classList.add('open');
+      profileBackdrop.classList.add('open');
+      profileDrawer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('profile-open');
+      setProfileMessage('');
+    }
+
+    function closeProfile(){
+      profileDrawer.classList.remove('open');
+      profileBackdrop.classList.remove('open');
+      profileDrawer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('profile-open');
+    }
+
+    function updateProfileUser(){
+      const email = currentUser?.email || '';
+      const metadataUsername = currentUser?.user_metadata?.username || '';
+
+      profileEmail.textContent = email || '—';
+      profileAccountName.textContent = metadataUsername || '...';
+
+      const avatarSource = metadataUsername || email || 'P';
+      profileAvatar.textContent = avatarSource[0].toUpperCase();
+
+      const accountTheme =
+        currentUser?.user_metadata?.theme ||
+        localStorage.getItem('photoFinderTheme') ||
+        'blue';
+
+      applyTheme(accountTheme);
+    }
+
+
+    async function loadUsernameProfile(){
+      if(!sb || !currentUser) return;
+
+      try{
+        const { data, error } = await sb
+          .from('profiles')
+          .select('username')
+          .eq('user_id', currentUser.id)
+          .maybeSingle();
+
+        if(error) throw error;
+
+        const username =
+          data?.username ||
+          currentUser?.user_metadata?.username ||
+          '';
+
+        profileUsername.value = username;
+        profileAccountName.textContent =
+          username ||
+          (currentUser?.email ? currentUser.email.split('@')[0] : 'Пользователь');
+
+        const avatarSource = username || currentUser?.email || 'P';
+        profileAvatar.textContent = avatarSource[0].toUpperCase();
+      }catch(error){
+        console.warn('Не удалось загрузить юзернейм:', error);
+
+        const fallbackUsername =
+          currentUser?.user_metadata?.username ||
+          (currentUser?.email ? currentUser.email.split('@')[0] : 'Пользователь');
+
+        profileAccountName.textContent = fallbackUsername;
+      }
+    }
+
     function showAuth(){
       authScreen.classList.remove('hidden');
       accountPill.hidden = true;
+      closeProfile();
     }
 
     function hideAuth(){
       authScreen.classList.add('hidden');
-      accountPill.hidden = false;
+      accountPill.hidden = true;
       accountEmail.textContent = currentUser?.email || 'Аккаунт';
+      updateProfileUser();
+      loadUsernameProfile();
     }
 
     function openLightbox(src){
@@ -2586,9 +3639,16 @@
     }
 
     async function loadBlobUrl(storagePath){
-      const { data, error } = await sb.storage.from(CLOUD_BUCKET).download(storagePath);
+      // Для показа используем обычную HTTPS-ссылку Supabase вместо blob: URL.
+      // Так изображения стабильнее отображаются и в браузере, и на GitHub Pages.
+      const { data, error } = await sb.storage
+        .from(CLOUD_BUCKET)
+        .createSignedUrl(storagePath, 60 * 60 * 24 * 7);
+
       if(error) throw error;
-      return URL.createObjectURL(data);
+      if(!data?.signedUrl) throw new Error('Supabase не вернул ссылку на изображение');
+
+      return data.signedUrl;
     }
 
     async function loadPhotos(){
@@ -2617,7 +3677,7 @@
               createdAt:new Date(row.created_at).getTime(),
               date:new Date(row.created_at).toLocaleString('ru-RU'),
               src,
-              objectUrl:true
+              objectUrl:false
             };
           }catch(error){
             console.warn('Не удалось загрузить фото', row.id, error);
@@ -2742,8 +3802,24 @@
         const tagsInput = card.querySelector('.tags-input');
         const photoWrap = card.querySelector('.photo-wrap');
         const favoriteBtn = card.querySelector('.favorite-btn');
+        const photoImage = card.querySelector('.photo');
 
         tagsInput.value = item.tags || '';
+
+        photoImage.addEventListener('error', async () => {
+          if(photoImage.dataset.retrying === '1') return;
+          photoImage.dataset.retrying = '1';
+
+          try{
+            const freshUrl = await loadBlobUrl(item.storagePath);
+            item.src = freshUrl;
+            photoImage.src = freshUrl;
+          }catch(error){
+            console.warn('Не удалось повторно загрузить фотографию:', error);
+          }finally{
+            photoImage.dataset.retrying = '0';
+          }
+        });
 
         photoWrap.addEventListener('click', e => {
           if(e.target.closest('.favorite-btn')) return;
@@ -3040,20 +4116,54 @@
     signInBtn.addEventListener('click', async () => {
       if(!configReady) return;
 
-      const email = authEmail.value.trim();
+      const identifier = authEmail.value.trim();
       const password = authPassword.value;
 
-      if(!email || !password){
-        setAuthMessage('Введи email и пароль.', 'error');
+      if(!identifier || !password){
+        setAuthMessage('Введи email/юзернейм и пароль.', 'error');
         return;
       }
 
       setAuthMessage('Входим...');
 
-      const { error } = await sb.auth.signInWithPassword({ email, password });
+      try{
+        if(identifier.includes('@')){
+          const { error } = await sb.auth.signInWithPassword({
+            email:identifier,
+            password
+          });
 
-      if(error){
-        setAuthMessage(error.message, 'error');
+          if(error) throw error;
+          return;
+        }
+
+        if(!isValidUsername(identifier)){
+          setAuthMessage('Юзернейм должен содержать 3–24 символа: буквы, цифры, точку или _.', 'error');
+          return;
+        }
+
+        const { data, error } = await sb.functions.invoke('username-login', {
+          body:{
+            username:identifier,
+            password
+          }
+        });
+
+        if(error) throw error;
+
+        if(!data?.access_token || !data?.refresh_token){
+          throw new Error(data?.message || 'Неверный логин или пароль.');
+        }
+
+        const { error:sessionError } = await sb.auth.setSession({
+          access_token:data.access_token,
+          refresh_token:data.refresh_token
+        });
+
+        if(sessionError) throw sessionError;
+      }catch(error){
+        console.error(error);
+        setAuthMessage(friendlyAuthError(error), 'error');
       }
     });
 
@@ -3061,32 +4171,161 @@
       if(!configReady) return;
 
       const email = authEmail.value.trim();
+      const username = normalizeUsername(authUsername.value);
       const password = authPassword.value;
 
-      if(!email || password.length < 6){
-        setAuthMessage('Введи email и пароль минимум из 6 символов.', 'error');
+      if(!email.includes('@')){
+        setAuthMessage('Для регистрации в первом поле укажи email.', 'error');
+        return;
+      }
+
+      if(!isValidUsername(username)){
+        setAuthMessage('Придумай юзернейм из 3–24 символов: буквы, цифры, точка или _.', 'error');
+        return;
+      }
+
+      if(password.length < 6){
+        setAuthMessage('Пароль должен содержать минимум 6 символов.', 'error');
         return;
       }
 
       setAuthMessage('Создаём аккаунт...');
 
-      const { data, error } = await sb.auth.signUp({
-        email,
-        password,
-        options:{
-          emailRedirectTo:window.location.href.split('#')[0].split('?')[0]
-        }
-      });
+      try{
+        const { data, error } = await sb.auth.signUp({
+          email,
+          password,
+          options:{
+            data:{
+              username
+            },
+            emailRedirectTo:window.location.href.split('#')[0].split('?')[0]
+          }
+        });
 
-      if(error){
-        setAuthMessage(error.message, 'error');
+        if(error) throw error;
+
+        if(data.session){
+          setAuthMessage(`Аккаунт @${username} создан.`, 'success');
+        }else{
+          setAuthMessage(`Аккаунт @${username} создан. Проверь почту и подтверди регистрацию.`, 'success');
+        }
+      }catch(error){
+        console.error(error);
+        setAuthMessage(friendlyAuthError(error), 'error');
+      }
+    });
+
+
+    saveUsernameBtn.addEventListener('click', async () => {
+      if(!sb || !currentUser) return;
+
+      const username = normalizeUsername(profileUsername.value);
+
+      if(!isValidUsername(username)){
+        setUsernameMessage('Используй 3–24 символа: буквы, цифры, точку или _.', 'error');
         return;
       }
 
-      if(data.session){
-        setAuthMessage('Аккаунт создан.', 'success');
-      }else{
-        setAuthMessage('Проверь почту и подтверди регистрацию.', 'success');
+      saveUsernameBtn.disabled = true;
+      saveUsernameBtn.textContent = 'Сохраняем...';
+      setUsernameMessage('');
+
+      try{
+        const { data, error } = await sb
+          .from('profiles')
+          .upsert({
+            user_id:currentUser.id,
+            username
+          }, {
+            onConflict:'user_id'
+          })
+          .select('username')
+          .single();
+
+        if(error) throw error;
+
+        profileUsername.value = data.username;
+        profileAccountName.textContent = data.username;
+        profileAvatar.textContent = data.username[0].toUpperCase();
+        setUsernameMessage('Юзернейм сохранён. Теперь по нему можно входить.', 'success');
+      }catch(error){
+        console.error(error);
+        const message = String(error?.message || '').toLowerCase();
+
+        if(error?.code === '23505' || message.includes('duplicate') || message.includes('unique')){
+          setUsernameMessage('Этот юзернейм уже занят.', 'error');
+        }else{
+          setUsernameMessage('Не удалось сохранить юзернейм.', 'error');
+        }
+      }finally{
+        saveUsernameBtn.disabled = false;
+        saveUsernameBtn.textContent = 'Сохранить юзернейм';
+      }
+    });
+
+    profileLogoButton.addEventListener('click', openProfile);
+    profileClose.addEventListener('click', closeProfile);
+    profileBackdrop.addEventListener('click', closeProfile);
+
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && profileDrawer.classList.contains('open')){
+        closeProfile();
+      }
+    });
+
+    themeGrid.addEventListener('click', e => {
+      const button = e.target.closest('[data-theme-choice]');
+      if(!button) return;
+      saveTheme(button.dataset.themeChoice);
+    });
+
+    changePasswordBtn.addEventListener('click', async () => {
+      if(!sb || !currentUser) return;
+
+      const password = newPassword.value;
+      const repeated = confirmPassword.value;
+
+      if(password.length < 6){
+        setProfileMessage('Пароль должен содержать минимум 6 символов.', 'error');
+        return;
+      }
+
+      if(password !== repeated){
+        setProfileMessage('Пароли не совпадают.', 'error');
+        return;
+      }
+
+      changePasswordBtn.disabled = true;
+      changePasswordBtn.textContent = 'Сохраняем...';
+      setProfileMessage('');
+
+      try{
+        const { error } = await sb.auth.updateUser({ password });
+
+        if(error) throw error;
+
+        newPassword.value = '';
+        confirmPassword.value = '';
+        setProfileMessage('Пароль успешно изменён.', 'success');
+      }catch(error){
+        console.error(error);
+        setProfileMessage(error?.message || 'Не удалось сменить пароль.', 'error');
+      }finally{
+        changePasswordBtn.disabled = false;
+        changePasswordBtn.textContent = 'Сменить пароль';
+      }
+    });
+
+    profileLogoutBtn.addEventListener('click', async () => {
+      if(!sb) return;
+      profileLogoutBtn.disabled = true;
+
+      try{
+        closeProfile();
+        await sb.auth.signOut();
+      }finally{
+        profileLogoutBtn.disabled = false;
       }
     });
 
@@ -3103,6 +4342,10 @@
         revokeAllObjectUrls();
         items = [];
         render();
+        profileEmail.textContent = '—';
+        profileAccountName.textContent = '...';
+        profileUsername.value = '';
+        profileAvatar.textContent = 'P';
         showAuth();
         return;
       }
@@ -3119,6 +4362,7 @@
     }
 
     async function init(){
+      applyTheme(localStorage.getItem('photoFinderTheme') || 'blue');
       render();
 
       if(!configReady){
@@ -3137,6 +4381,15 @@
         await handleSession(session);
       });
     }
+
+    [authEmail, authUsername, authPassword].forEach(input => {
+      input.addEventListener('keydown', e => {
+        if(e.key === 'Enter'){
+          e.preventDefault();
+          signInBtn.click();
+        }
+      });
+    });
 
     window.addEventListener('beforeunload', revokeAllObjectUrls);
 
